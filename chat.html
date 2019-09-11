@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <link rel="stylesheet" href="chat-stylesheet.css">
+    <meta name="google-signin-client_id" content="346925839515-g5rho0muuob69h91ivpeh6nrvho870ii.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script type="text/javascript" src="variables.js"></script>
+    <script type="text/javascript" src="sockets.js"></script>
+    <script type="text/javascript" src="requests.js"></script>
+    <script type="text/javascript" src="user_interface.js"></script>
+    <script type="text/javascript" src="cookies.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
+    
+    <meta charset="utf-8"/>
+    <title>Alloy</title>
+
+    <script>
+        try {
+            gapi.load('auth2', function() {
+                gapi.auth2.init({
+                    client_id: '346925839515-g5rho0muuob69h91ivpeh6nrvho870ii.apps.googleusercontent.com'
+                }).then(function () {
+                    auth2 = gapi.auth2.getAuthInstance();
+                    if (!auth2.isSignedIn.get() || auth2.currentUser.get() == undefined || getSessionToken() == null || getUpdateToken() == null) {
+                        document.location.href = `/login.html`;
+                    }
+                    else {
+                        console.log("Logged in.");
+                        let profile = auth2.currentUser.get().getBasicProfile()
+                        googleID = profile.getId();
+                        googleName = profile.getName();
+                        googlePhoto = profile.getImageUrl();
+                        name = googleName;
+                        photoLink = googlePhoto;
+                        sockets.init(`googleID=${googleID}&sessionToken=${getSessionToken()}`, loadRecentCourses);
+                    }
+                });
+            });
+        } 
+        catch (err) {
+            document.location.href = `/login.html`;
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(() => {
+                console.log('User signed out.');
+                document.location.href = "/login.html"
+            });
+        }
+        window.onbeforeunload = closeMessages;
+    </script>
+    
+</head>
+
+<body>
+    <div class="sidebar compact">
+        <img src="logo-shadow.svg" class="logo-small">
+        <button type="button" id="browse-button">Browse</button>
+        <button type="button" class="selected" id="courses-button">My courses</button>
+        <button type="button" id="groups-button">My groups</button>
+        <button type="button" id="logout-button">Sign out</button>
+        <button type="button" onclick="toggleIncognito(this)" id="incognito-button"></button>
+    </div>
+    <div class="sidebar-extension"></div>
+    <div class="sidebar-extension second collapsed"></div>
+    <div id="modal">
+        <div id="modal-content">
+            <h1 id="modal-title">Search for a class:</h1><button class="close" onclick="hideModal()">&times;</button>
+            <div style="display: inline-block"><div id="modal-info">
+                <input id="modal-field" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                onkeyup="" placeholder="Enter a name..." maxlength="50">
+                <button id="confirm-modal" onclick="submitModal()">
+            </div></div>
+        </div>
+        <div id="search-results"></div>
+        
+    </div>
+    
+
+    <div id="main">
+        <div id="messaging">
+            <div id="group-header"><span id="class-name"></span><span id="group-name"></span></div>
+            <div id="message-holder"></div>
+            <div id="message-area">
+                <form name="message-sender" onsubmit="return sendMessage()">
+                    <div id="message-send"><input type="submit" value="Send"></div>
+                    <div id="message-field"><input placeholder="Type a message..." autocomplete="off"></div>
+                </form>
+            </div>
+        </div>
+
+        <div id="browse" class="hidden">
+            <div class="browse-container">
+                <div class="search-box">
+                    <input id="search" class="search-text" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                    onkeyup="filterBrowse()" name="" placeholder="Search for a class...">
+                </div>
+                <li class="table-header">
+                    <div class="col-1">Subject</div>
+                    <div class="col-2">Number</div>
+                    <div class="col-3">Name</div>
+                    <div class="col-4"></div>
+                </li>
+        
+                <div id="table-rows"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("browse-button").addEventListener("click", () => {
+            document.getElementById("browse-button").className = "selected";
+            document.getElementById("groups-button").classList.remove("selected");
+            document.getElementById("courses-button").classList.remove("selected");
+            displayBrowse();
+        });
+        document.getElementById("courses-button").addEventListener("click", () => {
+            document.getElementById("courses-button").className = "selected";
+            document.getElementById("browse-button").classList.remove("selected");
+            document.getElementById("groups-button").classList.remove("selected");
+            displayMessaging();
+            openCoursesSidebar();
+        });
+        document.getElementById("groups-button").addEventListener("click", () => {
+            document.getElementById("groups-button").className = "selected";
+            document.getElementById("browse-button").classList.remove("selected");
+            document.getElementById("courses-button").classList.remove("selected");
+            displayMessaging();
+            openAssignmentsSidebar();
+        });
+        document.getElementById("logout-button").addEventListener("click", signOut);
+        document.getElementById("modal-field").addEventListener("keyup", () => {
+            if (document.getElementById("confirm-modal").className == "search") {
+                filter();
+            }
+        })
+    </script>
+</body>
+</html>

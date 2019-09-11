@@ -1,0 +1,32 @@
+<svg width="108" height="136" viewBox="0 0 108 136" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d)">
+<path d="M47.5 132L54 29L108 104.23L47.5 132Z" fill="#008EBB"/>
+</g>
+<g filter="url(#filter1_d)">
+<path d="M0 96.3883L54 29L47.5 132L0 96.3883Z" fill="#006281"/>
+</g>
+<path d="M47.5 132L54 29L108 104.23L47.5 132Z" fill="#008EBB"/>
+<line x1="2.5" y1="-2.5" x2="15.6433" y2="-2.5" transform="matrix(-0.939693 -0.34202 0.42512 -0.905137 35.5722 32.226)" stroke="#E26D00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="2.5" y1="-2.5" x2="16.1391" y2="-2.5" transform="matrix(0.573576 0.819152 -0.855665 0.517531 28.6311 9.00726)" stroke="#E26D00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="2.5" y1="-2.5" x2="15.6433" y2="-2.5" transform="matrix(0.939693 -0.34202 -0.42512 -0.905137 74.2729 32.226)" stroke="#E26D00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="2.5" y1="-2.5" x2="16.1391" y2="-2.5" transform="matrix(-0.573576 0.819152 0.855665 0.517531 81.214 9.00726)" stroke="#E26D00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="2.5" y1="-2.5" x2="15.7718" y2="-2.5" transform="matrix(0 -1 0.997763 -0.0668527 56.8685 19.1815)" stroke="#E26D00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<filter id="filter0_d" x="47.5" y="29" width="60.5" height="107" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+<feOffset dy="4"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+<filter id="filter1_d" x="0" y="29" width="54" height="107" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+<feOffset dy="4"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+</defs>
+</svg>

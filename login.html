@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <link rel="stylesheet" href="login-stylesheet.css">
+    <meta name="google-signin-client_id" content="346925839515-g5rho0muuob69h91ivpeh6nrvho870ii.apps.googleusercontent.com">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <script>
+        const devServerURL = "http://localhost:8000";
+        const prodServerURL = "https://alloy-backend.herokuapp.com";
+        let serverURL = document.location.href.includes("localhost") ? devServerURL : prodServerURL;
+    </script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script type="text/javascript" src="/cookies.js"></script> 
+    <title>Alloy — Login</title>
+
+    <script>
+        var googleUser = {};
+        var startApp = function() {
+            gapi.load('auth2', function() {
+                auth2 = gapi.auth2.init({
+                client_id: '346925839515-g5rho0muuob69h91ivpeh6nrvho870ii.apps.googleusercontent.com'});
+                attachSignIn(document.getElementById('customBtn'));
+            });
+        };
+      
+        function attachSignIn(element) {
+            auth2.attachClickHandler(element, {},
+                function(googleUser) {
+                    let profile = googleUser.getBasicProfile();
+                    let id_token = googleUser.getAuthResponse().id_token;
+
+                    // Sending id token to backend server for authentication
+                    let params = {
+                        'platform': 'web',
+                        'idtoken': id_token
+                    }
+                    var req = new XMLHttpRequest();
+                    req.open('POST', `${serverURL}/api/tokensignin`, true);
+                    req.setRequestHeader('Content-Type', 'application/json');
+                    req.onreadystatechange = (e) => {
+                        if (req.readyState == 4 && req.status == 200) {
+                            console.log('Signed in successfully.');
+                            console.log(id_token);
+                            console.log('ID: ' + profile.getId());
+                            console.log('Name: ' + profile.getName());
+                            console.log('Image URL: ' + profile.getImageUrl());
+                            console.log('Email: ' + profile.getEmail());
+                            let response = JSON.parse(req.responseText);
+                            setSessionToken(response.session_token)
+                            setUpdateToken(response.update_token)
+                            window.location = `/chat.html`;
+                        }
+                        else if (req.readyState == 4 && req.status == 400) {
+                            console.log(req.responseText)
+                        }
+                    };
+                    req.send(JSON.stringify(params));
+                    
+                }, function(error) {
+                    console.log(error);
+                }
+            );
+        }
+    </script>
+</head>
+<body>
+    <div class="center">
+    <div><img src="logo-shadow.svg" id="logo"><h1 id="title">alloy</h1></div>
+    <br>
+    <div id="customBtn" class="customGPlusSignIn">
+        <span class="icon"></span>
+        <span class="buttonText">Sign in with Google</span>
+    </div>
+    <script>startApp();</script>
+    </div>
+</body>
+</html>

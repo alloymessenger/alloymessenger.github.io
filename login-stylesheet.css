@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet');
+
+body, html {
+    height: 100%;
+    font-size: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+
+html {
+    background-color: rgb(245, 245, 245);
+    background-attachment: fixed;
+}
+
+#logo {
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    height: 150px;
+    width: 150px;
+    vertical-align: middle;
+}
+
+#title {
+    color: rgb(40, 40, 40);
+    display: inline;
+    text-align: center;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 150px;
+    font-weight: normal;
+    text-shadow: 3px 3px rgba(0, 0, 0, 0.3);
+    vertical-align: middle;
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#customBtn {
+    display: inline-block;
+    background: white;
+    color: #444;
+    width: 300px;
+    border-radius: 5px;
+    border: solid rgb(230, 230, 230); 
+    /* border: solid rgb(100, 100, 100); Thinner appearance */
+    box-shadow: 2px 2px 2px rgb(200, 200, 200);
+    white-space: nowrap;
+}
+#customBtn:hover {
+    cursor: pointer;
+}
+span.label {
+    font-family: serif;
+    font-weight: normal;
+}
+span.icon {
+    background: url('/g-logo.svg') transparent 0px 50% no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    margin: 10px 10px 10px 10px;
+}
+span.buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
