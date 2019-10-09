@@ -291,7 +291,7 @@ function toggleIncognito(button) {
     else {
         button.classList.add("active");
         name = "anonymous";
-        photoLink = "/incognito-profile-photo.png";
+        photoLink = "/icons/incognito-profile-photo.png";
     }
 }
 
