@@ -60,7 +60,7 @@ span.label {
     font-weight: normal;
 }
 span.icon {
-    background: url('/g-logo.svg') transparent 0px 50% no-repeat;
+    background: url('/icons/g-logo.svg') transparent 0px 50% no-repeat;
     display: inline-block;
     vertical-align: middle;
     width: 40px;

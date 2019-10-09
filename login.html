@@ -48,7 +48,7 @@
                             let response = JSON.parse(req.responseText);
                             setSessionToken(response.session_token)
                             setUpdateToken(response.update_token)
-                            window.location = `/chat.html`;
+                            window.location = `/`;
                         }
                         else if (req.readyState == 4 && req.status == 400) {
                             console.log(req.responseText)
@@ -65,7 +65,7 @@
 </head>
 <body>
     <div class="center">
-    <div><img src="logo-shadow.svg" id="logo"><h1 id="title">alloy</h1></div>
+    <div><img src="/icons/logo-shadow.svg" id="logo"><h1 id="title">alloy</h1></div>
     <br>
     <div id="customBtn" class="customGPlusSignIn">
         <span class="icon"></span>
