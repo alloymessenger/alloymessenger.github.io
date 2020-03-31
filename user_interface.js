@@ -84,7 +84,7 @@ function getRecentCourses(user) {
     var sidebarExtension = document.getElementsByClassName("sidebar-extension")[0];
     clearElements(sidebarExtension);
     courses.forEach((course) => {
-        var color = getColor(course.num_assignments);
+        var color = getColor(course.num_rooms);
         let courseButton = document.createElement("button");
         courseButton.classList.add(color);
         let dot = document.createElement("span");
@@ -96,7 +96,7 @@ function getRecentCourses(user) {
                                 <div class="center-container-right">
                                     <span class="top">${course.subject} ${course.number}</span>
                                     <span class="middle">${course.name}</span>
-                                    <span class="bottom">${course.num_assignments} Assignment${course.num_assignments == 1 ? "" : "s"}</span>
+                                    <span class="bottom">${course.num_rooms} Room${course.num_rooms == 1 ? "" : "s"}</span>
                                 </div></div>`
         courseButton.type = "button";
         courseButton.dataset.id = course.course_id;
@@ -116,7 +116,7 @@ function getRecentCourses(user) {
                 child.classList.remove("selected");
             })
             courseButton.classList.add("selected")
-            loadCourseAssignments(course.course_id)
+            loadCourseRooms(course.course_id)
         });
         sidebarExtension.appendChild(courseButton);
     });
@@ -132,77 +132,77 @@ function getRecentCourses(user) {
     sidebarExtension.appendChild(addButton);
 }
 
-function loadCourseAssignments(courseID) {
-    requests.getAssignmentsInCourse(courseID, (assignments) => {
+function loadCourseRooms(courseID) {
+    requests.getRoomsInCourse(courseID, (rooms) => {
         var sidebarExtension2 = document.getElementsByClassName("sidebar-extension second")[0];
         clearElements(sidebarExtension2);
-        assignments.forEach((assignment) => {
-            var assignmentButton = document.createElement("button");
-            assignmentButton.type = "button";
-            assignmentButton.addEventListener("click", () => {
-                setChatName(`${displayedCourse.subject} ${displayedCourse.number}`, displayedCourse.name, assignment.name);
-                openMessages(assignment.course_id, assignment.assignment_id);
+        rooms.forEach((room) => {
+            var roomButton = document.createElement("button");
+            roomButton.type = "button";
+            roomButton.addEventListener("click", () => {
+                setChatName(`${displayedCourse.subject} ${displayedCourse.number}`, displayedCourse.name, room.name);
+                openMessages(room.course_id, room.room_id);
                 document.getElementById("courses-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
                 displayMessaging();
             });
             var innerText = document.createElement("div");
-            innerText.innerHTML = `<span class="top">${assignment.name}</span>
-                                    <span class="bottom">${assignment.last_message == null ? "Send a message..." : `${getFirstName(assignment.last_message_name)}: ${assignment.last_message}`}</span>`;
-            assignmentButton.appendChild(innerText);
-            sidebarExtension2.appendChild(assignmentButton);
+            innerText.innerHTML = `<span class="top">${room.name}</span>
+                                    <span class="bottom">${room.last_message == null ? "Send a message..." : `${getFirstName(room.last_message_name)}: ${room.last_message}`}</span>`;
+            roomButton.appendChild(innerText);
+            sidebarExtension2.appendChild(roomButton);
         });
         var addButton = document.createElement("button");
         addButton.type = "button";
         addButton.className = "special";
         var innerText = document.createElement("span");
-        innerText.innerHTML = "Add an assignment...";
+        innerText.innerHTML = "Add a room...";
         addButton.appendChild(innerText);
         addButton.addEventListener("click", () => {
-            displayModal("assignment");
+            displayModal("room");
         });
         sidebarExtension2.appendChild(addButton);
     })
-    openCourseAssignmentsSidebar();
+    openCourseRoomsSidebar();
 }
 
-function loadRecentAssignments() {
+function loadRecentRooms() {
     sockets.getUserInfo((user) => {
-        getRecentAssignments(user)
+        getRecentRooms(user)
     })
 }
 
-function getRecentAssignments(user) {
-    var assignments = user.assignments;
+function getRecentRooms(user) {
+    var rooms = user.rooms;
     var sidebarExtension = document.getElementsByClassName("sidebar-extension")[0];
     clearElements(sidebarExtension);
-    assignments.forEach((assignment) => {
-        var assignmentButton = document.createElement("button");
-        assignmentButton.type = "button";
-        assignmentButton.addEventListener("click", () => {
-            requests.getCourseInfo(assignment.course_id, (course) => {
-                setChatName(`${course.subject} ${course.number}`, course.name, assignment.name);
-                openMessages(assignment.course_id, assignment.assignment_id);
+    rooms.forEach((room) => {
+        var roomButton = document.createElement("button");
+        roomButton.type = "button";
+        roomButton.addEventListener("click", () => {
+            requests.getCourseInfo(room.course_id, (course) => {
+                setChatName(`${course.subject} ${course.number}`, course.name, room.name);
+                openMessages(room.course_id, room.room_id);
                 document.getElementById("groups-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
                 displayMessaging();
             })
         });
         var innerText = document.createElement("div");
-        innerText.innerHTML = `<span class="top">${assignment.name}</span>
-        <span class="bottom">${assignment.last_message == null ? "Send a message..." : `${getFirstName(assignment.last_message_name)}: ${assignment.last_message}`}</span>`;
-        assignmentButton.appendChild(innerText);
-        sidebarExtension.appendChild(assignmentButton);
+        innerText.innerHTML = `<span class="top">${room.name}</span>
+        <span class="bottom">${room.last_message == null ? "Send a message..." : `${getFirstName(room.last_message_name)}: ${room.last_message}`}</span>`;
+        roomButton.appendChild(innerText);
+        sidebarExtension.appendChild(roomButton);
     });
 }
 
-function openMessages(courseID, assignmentID) {
+function openMessages(courseID, roomID) {
     if (inRoom) {
-        sockets.leaveAssignment(window.assignmentID, window.courseID, name, () => {
+        sockets.leaveRoom(window.roomID, window.courseID, name, () => {
                 inRoom = false;
                 console.log("Left room successfully.")
-                sockets.joinAssignment(assignmentID, courseID, name, () => {
-                    window.assignmentID = assignmentID;
+                sockets.joinRoom(roomID, courseID, name, () => {
+                    window.roomID = roomID;
                     window.courseID = courseID;
                     inRoom = true;
                     console.log("Joined room successfully.")
@@ -210,12 +210,12 @@ function openMessages(courseID, assignmentID) {
         });
     }
     else {
-        sockets.joinAssignment(assignmentID, courseID, name, () => {
+        sockets.joinRoom(roomID, courseID, name, () => {
             inRoom = true;
             console.log("Joined room successfully.")
         })
     }
-    requests.getMessagesInAssignment(courseID, assignmentID, (messages) => {
+    requests.getMessagesInRoom(courseID, roomID, (messages) => {
         clearMessages();
         addMessages(messages);
     });
@@ -223,9 +223,9 @@ function openMessages(courseID, assignmentID) {
 
 function closeMessages() {
     if (inRoom) {
-        sockets.leaveAssignment(assignmentID, courseID, name, () => {
+        sockets.leaveRoom(roomID, courseID, name, () => {
             inRoom = false;
-            console.log("Left assignment successfully.")
+            console.log("Left room successfully.")
         })
     }
     if (displayedCourse) {
@@ -243,7 +243,7 @@ function sendMessage() {
     var time = new Date().toISOString().slice(0, 19)
     if (messageField.value != '') {
         messageField.value = '';
-        sockets.messageCourse(assignmentID, courseID, name, photoLink, time, message, (success) => 
+        sockets.messageCourse(roomID, courseID, name, photoLink, time, message, (success) => 
             {
                 if (success) {
                     console.log("Message sent successfully.");
@@ -263,14 +263,14 @@ function openCoursesSidebar() {
     document.getElementById("main").className = "one-sidebar";
 }
 
-function openCourseAssignmentsSidebar() {
+function openCourseRoomsSidebar() {
     document.getElementsByClassName("sidebar-extension")[0].className = "sidebar-extension";
     document.getElementsByClassName("sidebar-extension second")[0].className = "sidebar-extension second compact"
     document.getElementById("main").className = "two-sidebars";
 }
 
-function openAssignmentsSidebar() {
-    loadRecentAssignments();
+function openRoomsSidebar() {
+    loadRecentRooms();
     document.getElementsByClassName("sidebar-extension")[0].className = "sidebar-extension compact";
     document.getElementsByClassName("sidebar-extension second")[0].className = "sidebar-extension second collapsed"
     document.getElementsByClassName("sidebar-extension second")[0].querySelectorAll("button").forEach(
@@ -303,8 +303,8 @@ function displayModal(styleName) {
         document.getElementById("search-results").style.display = "block";
         document.getElementById("confirm-modal").className = "search"
     }
-    else if (styleName == "assignment") {
-        document.getElementById("modal-title").innerHTML = "Enter assignment name:"
+    else if (styleName == "room") {
+        document.getElementById("modal-title").innerHTML = "Enter room name:"
         document.getElementById("search-results").style.display = "none";
         document.getElementById("confirm-modal").className = "submit"
     }
@@ -326,39 +326,39 @@ function fetchCourses() {
 
 function submitModal() {
     if (document.getElementById("confirm-modal").className == "submit") {
-        sockets.addAssignment(displayedCourse.course_id, document.getElementById("modal-field").value.trim(), (result) => {
+        sockets.addRoom(displayedCourse.course_id, document.getElementById("modal-field").value.trim(), (result) => {
             hideModal();
         });
     }
 }
 
-function addAssignmentToSidebar(data) {
+function addRoomToSidebar(data) {
     var firstSidebarExtension = document.getElementsByClassName("sidebar-extension")[0];
     Array.from(firstSidebarExtension.children).forEach((child) => {
         if (child.classList.contains("selected")) {
-            let assignmentCount = child.firstElementChild.lastElementChild.lastElementChild.innerHTML;
-            let numAssignments = parseInt(assignmentCount.substring(0, assignmentCount.indexOf(" "))) + 1;
-            let newColor = getColor(numAssignments);
+            let roomCount = child.firstElementChild.lastElementChild.lastElementChild.innerHTML;
+            let numRooms = parseInt(roomCount.substring(0, roomCount.indexOf(" "))) + 1;
+            let newColor = getColor(numRooms);
             child.className = `${newColor} selected`
-            child.firstElementChild.lastElementChild.lastElementChild.innerHTML = `${numAssignments} Assignment${numAssignments == 1 ? "" : "s"}`;
+            child.firstElementChild.lastElementChild.lastElementChild.innerHTML = `${numRooms} Room${numRooms == 1 ? "" : "s"}`;
         }
     });
 
     var secondSidebarExtension = document.getElementsByClassName("sidebar-extension second")[0];
-    var assignmentButton = document.createElement("button");
-    assignmentButton.type = "button";
+    var roomButton = document.createElement("button");
+    roomButton.type = "button";
     var innerText = document.createElement("div");
-        innerText.innerHTML = `<span class="top">${data.assignmentName}</span>
+        innerText.innerHTML = `<span class="top">${data.roomName}</span>
                                 <span class="bottom">Send a message...</span>`;
-    assignmentButton.appendChild(innerText);
-    assignmentButton.addEventListener("click", () => {
-        setChatName(`${displayedCourse.subject} ${displayedCourse.number}`, displayedCourse.name, data.assignmentName);
-        openMessages(displayedCourse.course_id, data.assignmentID);
+    roomButton.appendChild(innerText);
+    roomButton.addEventListener("click", () => {
+        setChatName(`${displayedCourse.subject} ${displayedCourse.number}`, displayedCourse.name, data.roomName);
+        openMessages(displayedCourse.course_id, data.roomID);
         document.getElementById("courses-button").className = "selected";
         document.getElementById("browse-button").classList.remove("selected");
         displayMessaging();
     });
-    secondSidebarExtension.insertBefore(assignmentButton, secondSidebarExtension.firstElementChild)
+    secondSidebarExtension.insertBefore(roomButton, secondSidebarExtension.firstElementChild)
 }
 
 function addModalCourseRows(courses) {
@@ -402,7 +402,7 @@ function addCourse(course, callback) {
             console.log("Class successfully added.")
             var sidebarExtension = document.getElementsByClassName("sidebar-extension")[0];
             let courseButton = document.createElement("button");
-            var color = getColor(course.num_assignments);
+            var color = getColor(course.num_rooms);
             courseButton.classList.add(color);
             let dot = document.createElement("span");
             dot.className = "dot";
@@ -413,7 +413,7 @@ function addCourse(course, callback) {
                                     <div class="center-container-right">
                                         <span class="top">${course.subject} ${course.number}</span>
                                         <span class="middle">${course.name}</span>
-                                        <span class="bottom">${course.num_assignments} Assignments</span>
+                                        <span class="bottom">${course.num_rooms} Rooms</span>
                                     </div></div>`
             courseButton.type = "button";
             courseButton.dataset.id = course.course_id;
@@ -433,7 +433,7 @@ function addCourse(course, callback) {
                     child.classList.remove("selected");
                 })
                 courseButton.classList.add("selected");
-                loadCourseAssignments(course.course_id)
+                loadCourseRooms(course.course_id)
             });
             sidebarExtension.insertBefore(courseButton, sidebarExtension.firstElementChild)
         }
@@ -457,9 +457,9 @@ function removeCourse(course, callback) {
     })
 }
 
-function setChatName(courseNumber, courseName, assignmentName) {
+function setChatName(courseNumber, courseName, roomName) {
     document.getElementById("class-name").innerHTML = `<b>${courseNumber}</b>: ${courseName}`;
-    document.getElementById("group-name").innerHTML = assignmentName;
+    document.getElementById("group-name").innerHTML = roomName;
 }
 
 function displayBrowse() {

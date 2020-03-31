@@ -12,6 +12,10 @@ html {
     background-attachment: fixed;
 }
 
+button:hover {
+    cursor: pointer;
+}
+
 #logo {
     display: inline-block;
     margin-left: 20px;
@@ -41,6 +45,12 @@ html {
     transform: translate(-50%, -50%);
 }
 
+.bottom-right {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+}
+
 #customBtn {
     display: inline-block;
     background: white;
@@ -55,12 +65,22 @@ html {
 #customBtn:hover {
     cursor: pointer;
 }
+
+#info-button {
+    background-image: url('./icons/info.svg');
+    background-size: 75px 75px;
+    background-repeat: no-repeat;
+    height: 75px;
+    width: 75px;
+    border: none;
+}
+
 span.label {
     font-family: serif;
     font-weight: normal;
 }
 span.icon {
-    background: url('/icons/g-logo.svg') transparent 0px 50% no-repeat;
+    background: url('./icons/g-logo.svg') transparent 0px 50% no-repeat;
     display: inline-block;
     vertical-align: middle;
     width: 40px;
@@ -75,4 +95,54 @@ span.buttonText {
     font-size: 20px;
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
+}
+
+.top-right {
+    position: relative;
+    top: 30px;
+    right: 30px;
+}
+
+.close {
+    margin: 12px 20px 6px 0px;
+    font-size: 24px;
+    color: rgb(255, 255, 255);
+    float: right;
+    background-color: transparent;
+    border: none;
+}
+
+#modal {
+    display: none;
+    transition: 0.5s;
+}
+
+#modal-content {
+    position: relative;
+    z-index: 3;
+    width: 80%;
+    box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.2);
+    border-radius: 15px;
+    background-color: rgb(230, 230, 230);
+    vertical-align: middle;
+    display: inline-block;
+    text-align: left;
+    margin: auto;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: black;
+}
+
+.modal-text {
+    margin: 20px 20px 20px 20px;
+}
+
+.header {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+h3 {
+    margin-bottom: -10px;
 }

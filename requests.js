@@ -25,22 +25,22 @@ requests = function () {
         req.send();
     }
     
-    function getAssignmentsInCourse(courseID, callback) {
+    function getRoomsInCourse(courseID, callback) {
         let req = new XMLHttpRequest();
-        let assignmentsURL = `${serverURL}/api/course/${courseID}/assignments/`;
-        req.open("GET", assignmentsURL, true);
+        let roomsURL = `${serverURL}/api/course/${courseID}/rooms/`;
+        req.open("GET", roomsURL, true);
         req.onreadystatechange = (e) => {
             if (req.readyState == 4 && req.status == 200) {
-                var assignments = JSON.parse(req.responseText);
-                callback(assignments);
+                var rooms = JSON.parse(req.responseText);
+                callback(rooms);
             }
         }
         req.send();
     }
     
-    function getMessagesInAssignment(courseID, assignmentID, callback) {
+    function getMessagesInRoom(courseID, roomID, callback) {
         let req = new XMLHttpRequest();
-        let messagesURL = `${serverURL}/api/course/${courseID}/assignment/${assignmentID}/`;
+        let messagesURL = `${serverURL}/api/course/${courseID}/room/${roomID}/`;
         req.open("GET", messagesURL, true);
         req.onreadystatechange = (e) => {
             if (req.readyState == 4 && req.status == 200) {
@@ -54,8 +54,8 @@ requests = function () {
     return {
         getCourses: getCourses,
         getCourseInfo: getCourseInfo,
-        getAssignmentsInCourse: getAssignmentsInCourse,
-        getMessagesInAssignment: getMessagesInAssignment
+        getRoomsInCourse: getRoomsInCourse,
+        getMessagesInRoom: getMessagesInRoom
     }
 }()
 

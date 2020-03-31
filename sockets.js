@@ -72,12 +72,12 @@ sockets = function() {
         socket.off('message');
     }
     function registerAssignmentHandler() {
-        socket.on('new_assignment', (data) => {
+        socket.on('new_room', (data) => {
             addAssignmentToSidebar(data);
         })
     }
     function unregisterAssignmentHandler() {
-        socket.off('new_assignment');
+        socket.off('new_room');
     }
     function joinCourse(courseID, name, callback) {
         socket.emit('join_course', {courseID, name}, callback);
@@ -87,21 +87,21 @@ sockets = function() {
         socket.emit('leave_course', {courseID, name}, callback);
         unregisterAssignmentHandler();
     }
-    function joinAssignment(assignmentID, courseID, name, callback) {
-        window.assignmentID = assignmentID;
+    function joinAssignment(roomID, courseID, name, callback) {
+        window.roomID = roomID;
         window.courseID = courseID;
-        socket.emit('join_assignment', {assignmentID, courseID, name}, callback)
+        socket.emit('join_room', {roomID, courseID, name}, callback)
         registerMessageHandler();
     }
-    function leaveAssignment(assignmentID, courseID, name, callback) {
-        socket.emit('leave_assignment', {assignmentID, courseID, name}, callback)
+    function leaveAssignment(roomID, courseID, name, callback) {
+        socket.emit('leave_room', {roomID, courseID, name}, callback)
         unregisterMessageHandler();
     }
-    function messageCourse(assignmentID, courseID, name, photoLink, time, message, callback) {
-        socket.emit('message', {assignmentID, courseID, name, photoLink, time, message}, callback)
+    function messageCourse(roomID, courseID, name, photoLink, time, message, callback) {
+        socket.emit('message', {roomID, courseID, name, photoLink, time, message}, callback)
     }
-    function addAssignment(courseID, assignmentName, callback) {
-        socket.emit('new_assignment', {courseID, assignmentName}, callback)
+    function addAssignment(courseID, roomName, callback) {
+        socket.emit('new_room', {courseID, roomName}, callback)
     }
     function getUserInfo(callback) {
         socket.emit('get_user_info', callback)

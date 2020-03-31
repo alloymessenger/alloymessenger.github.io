@@ -8,9 +8,9 @@ var googleName;
 var name;
 var photoLink;
 var googlePhoto;
-var displayedCourse;  // The course ID of the assignments displayed in the sidebar;
+var displayedCourse;  // The course ID of the rooms displayed in the sidebar;
 var courseID;       // The course ID of the user's current chat room;
-var assignmentID;
+var roomID;
 var courses = [];
 
 if (document.location.href.includes("localhost")) {
