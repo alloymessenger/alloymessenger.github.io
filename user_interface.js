@@ -170,6 +170,9 @@ function getRecentChannels(user, type) {
 }
 
 function loadChannelRooms(channelID) {
+    if (window.channelID == undefined) {
+        window.channelID = channelID;
+    }
     requests.getRoomsInChannel(channelID, (rooms) => {
         var sidebarExtension2 = document.getElementsByClassName("sidebar-extension second")[0];
         clearElements(sidebarExtension2);
