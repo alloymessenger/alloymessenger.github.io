@@ -369,7 +369,7 @@ function fetchCourses() {
     if (courses.length == 0) {
         requests.getCourses((courses) => {
             addModalChannelRows(courses);
-            addBrowseChannelRows(courses);
+            addBrowseCourseRows(courses);
         })
     }
 }
@@ -377,7 +377,7 @@ function fetchCourses() {
 function fetchTopics() {
     requests.getTopics((topics) => {
         addModalTopicRows(topics);
-        addBrowseChannelRows(topics);
+        addBrowseTopicRows(topics);
     })
 }
 
@@ -531,11 +531,22 @@ function displayMessaging() {
     fetchChannels();
 }
 
-function addBrowseChannelRows(classes) {
+function addBrowseTopicRows(topics) {
+    addBrowseChannelRows(topics, "topic");
+}
+
+function addBrowseCourseRows(courses) {
+    addBrowseChannelRows(courses, "course");
+}
+
+function addBrowseChannelRows(channels, type) {
     var tableRows = document.getElementById("table-rows");
     sockets.getUserInfo((user) => {
-        let selectedChannels = user.channels;
-        classes.forEach((channel) => {
+        let selectedChannels;
+        if (type == "course") {
+            selectedChannels = user.courses;
+        }
+        channels.forEach((channel) => {
             let div = document.createElement("div");
             let button = document.createElement("button");
             if (selectedChannels.some(e => e.channel_id === channel.channel_id)) {
@@ -553,9 +564,16 @@ function addBrowseChannelRows(classes) {
             let tableRow = document.createElement("li");
             tableRow.className = "table-row";
             tableRow.id = channel.channel_id;
-            tableRow.innerHTML = `<div class="col-1">${channel.subject}</div>
-                                    <div class="col-2">${channel.number}</div>
-                                    <div class="col-3">${channel.name}</div>`;
+            if (type == "course") {
+                tableRow.innerHTML = `<div class="col-1">${channel.subject}</div>
+                                        <div class="col-2">${channel.number}</div>
+                                        <div class="col-3">${channel.name}</div>`;
+            }
+            else {
+                tableRow.innerHTML = `<div class="col-1"></div>
+                                        <div class="col-2"></div>
+                                        <div class="col-3">${channel.name}</div>`;
+            }
             tableRow.appendChild(button);
             row.appendChild(tableRow);
             tableRows.appendChild(row);
