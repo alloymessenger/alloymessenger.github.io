@@ -62,10 +62,11 @@
 
 <body>
     <div class="sidebar compact">
-        <img src="/icons/logo-shadow.svg" class="logo-small">
+        <img src="./icons/logo-shadow.svg" class="logo-small">
         <button type="button" id="browse-button">Browse</button>
         <button type="button" class="selected" id="courses-button">My courses</button>
-        <button type="button" id="groups-button">My groups</button>
+        <button type="button" id="topics-button">My topics</button>
+        <button type="button" id="groups-button">My channels</button>
         <button type="button" id="logout-button">Sign out</button>
         <button type="button" onclick="toggleIncognito(this)" id="incognito-button"></button>
     </div>
@@ -119,6 +120,7 @@
         document.getElementById("browse-button").addEventListener("click", () => {
             document.getElementById("browse-button").className = "selected";
             document.getElementById("groups-button").classList.remove("selected");
+            document.getElementById("topics-button").classList.remove("selected");
             document.getElementById("courses-button").classList.remove("selected");
             displayBrowse();
         });
@@ -126,12 +128,22 @@
             document.getElementById("courses-button").className = "selected";
             document.getElementById("browse-button").classList.remove("selected");
             document.getElementById("groups-button").classList.remove("selected");
+            document.getElementById("topics-button").classList.remove("selected");
             displayMessaging();
             openCoursesSidebar();
+        });
+        document.getElementById("topics-button").addEventListener("click", () => {
+            document.getElementById("topics-button").className = "selected";
+            document.getElementById("courses-button").classList.remove("selected");
+            document.getElementById("browse-button").classList.remove("selected");
+            document.getElementById("groups-button").classList.remove("selected");
+            displayMessaging();
+            openTopicsSidebar();
         });
         document.getElementById("groups-button").addEventListener("click", () => {
             document.getElementById("groups-button").className = "selected";
             document.getElementById("browse-button").classList.remove("selected");
+            document.getElementById("topics-button").classList.remove("selected");
             document.getElementById("courses-button").classList.remove("selected");
             displayMessaging();
             openAssignmentsSidebar();

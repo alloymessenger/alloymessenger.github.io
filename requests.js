@@ -1,8 +1,8 @@
 requests = function () {
     function getCourses(callback) {
         let req = new XMLHttpRequest();
-        let classesURL = `${serverURL}/api/courses/`;
-        req.open("GET", classesURL, true);
+        let coursesURL = `${serverURL}/api/courses/`;
+        req.open("GET", coursesURL, true);
         req.onreadystatechange = (e) => {
             if (req.readyState == 4 && req.status == 200) {
                 courses = JSON.parse(req.responseText);
@@ -11,23 +11,36 @@ requests = function () {
         }
         req.send();
     }
-    
-    function getCourseInfo(courseID, callback) {
+
+    function getTopics(callback) {
         let req = new XMLHttpRequest();
-        let courseURL = `${serverURL}/api/course/${courseID}/`;
-        req.open("GET", courseURL, true);
+        let topicsURL = `${serverURL}/api/topics/`;
+        req.open("GET", classesURL, true);
         req.onreadystatechange = (e) => {
             if (req.readyState == 4 && req.status == 200) {
-                let course = JSON.parse(req.responseText);
-                callback(course);
+                topics = JSON.parse(req.responseText);
+                callback(topics);
             }
         }
         req.send();
     }
     
-    function getRoomsInCourse(courseID, callback) {
+    function getChannelInfo(channelID, callback) {
         let req = new XMLHttpRequest();
-        let roomsURL = `${serverURL}/api/course/${courseID}/rooms/`;
+        let channelURL = `${serverURL}/api/channel/${channelID}/`;
+        req.open("GET", channelURL, true);
+        req.onreadystatechange = (e) => {
+            if (req.readyState == 4 && req.status == 200) {
+                let channel = JSON.parse(req.responseText);
+                callback(channel);
+            }
+        }
+        req.send();
+    }
+    
+    function getRoomsInChannel(channelID, callback) {
+        let req = new XMLHttpRequest();
+        let roomsURL = `${serverURL}/api/channel/${channelID}/rooms/`;
         req.open("GET", roomsURL, true);
         req.onreadystatechange = (e) => {
             if (req.readyState == 4 && req.status == 200) {
@@ -38,9 +51,9 @@ requests = function () {
         req.send();
     }
     
-    function getMessagesInRoom(courseID, roomID, callback) {
+    function getMessagesInRoom(channelID, roomID, callback) {
         let req = new XMLHttpRequest();
-        let messagesURL = `${serverURL}/api/course/${courseID}/room/${roomID}/`;
+        let messagesURL = `${serverURL}/api/channel/${channelID}/room/${roomID}/`;
         req.open("GET", messagesURL, true);
         req.onreadystatechange = (e) => {
             if (req.readyState == 4 && req.status == 200) {
@@ -53,8 +66,9 @@ requests = function () {
 
     return {
         getCourses: getCourses,
-        getCourseInfo: getCourseInfo,
-        getRoomsInCourse: getRoomsInCourse,
+        getTopics: getTopics,
+        getChannelInfo: getChannelInfo,
+        getRoomsInChannel: getRoomsInChannel,
         getMessagesInRoom: getMessagesInRoom
     }
 }()

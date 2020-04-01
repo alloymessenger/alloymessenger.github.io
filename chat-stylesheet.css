@@ -164,7 +164,7 @@ button:hover {
 }
 
 .sidebar-extension button span:hover.dot {
-    background-image: url("/icons/delete.png");
+    background-image: url("./icons/delete.png");
     border-radius: 33px;
     border: 5px solid rgb(230, 230, 230);
     background-color: transparent;
@@ -172,15 +172,15 @@ button:hover {
 }
 
 .sidebar-extension button.selected.gray span:hover.dot {
-    background-image: url("/icons/delete-gray.png");
+    background-image: url("./icons/delete-gray.png");
 }
 
 .sidebar-extension button.selected.blue span:hover.dot {
-    background-image: url("/icons/delete-blue.png");
+    background-image: url("./icons/delete-blue.png");
 }
 
 .sidebar-extension button.selected.pink span:hover.dot {
-    background-image: url("/icons/delete-pink.png");
+    background-image: url("./icons/delete-pink.png");
 }
 
 .sidebar-extension button.selected.orange span:hover.dot {
@@ -360,7 +360,7 @@ button:hover {
 }
 
 #incognito-button {
-    background-image: url("/icons/incognito-dark.svg");
+    background-image: url("./icons/incognito-dark.svg");
     background-color: rgb(40,40,40);
     background-repeat: no-repeat;
     background-position: 50% 50%;
@@ -382,7 +382,7 @@ button:hover {
 
 #incognito-button.active {
     background-color: rgb(30,30,30);
-    background-image: url("/icons/incognito.svg");
+    background-image: url("./icons/incognito.svg");
     border: 2px solid rgb(18, 18, 18);
     transition: 0.2s;
 }
@@ -686,12 +686,12 @@ textarea:focus, input:focus {
 
 #confirm-modal.search {
     background-color: rgba(0, 142, 187, 0.7);
-    background-image: url("/icons/search.png");
+    background-image: url("./icons/search.png");
 }
 
 #confirm-modal.submit {
     background-color: rgba(0, 142, 187, 0.7);
-    background-image: url("/icons/check.svg");
+    background-image: url("./icons/check.svg");
 }
 
 #search-results {
@@ -904,12 +904,12 @@ textarea:focus, input:focus {
 }
 
 #browse button.select.add {
-    background-image: url("/icons/plus.svg");
+    background-image: url("./icons/plus.svg");
     background-color: rgba(0, 142, 187, 0.7);
 }
 
 #browse button.select.check {
-    background-image: url("/icons/check.svg");
+    background-image: url("./icons/check.svg");
     background-color: rgb(226, 109, 1);
     transition: 0.3s;
 }
@@ -991,31 +991,38 @@ textarea:focus, input:focus {
     }
     
     .sidebar button#browse-button {
-        background-image: url("/icons/search.png");
+        background-image: url("./icons/search.png");
     }
     .sidebar button:hover#browse-button {
-        background-image: url("/icons/search-dark.png");
+        background-image: url("./icons/search-dark.png");
     }
     
     .sidebar button#courses-button {
-        background-image: url("/icons/course.png");
+        background-image: url("./icons/course.png");
     }
     .sidebar button:hover#courses-button {
-        background-image: url("/icons/course-dark.png");
+        background-image: url("./icons/course-dark.png");
     }
     
     .sidebar button#groups-button {
-        background-image: url("/icons/group.png");
+        background-image: url("./icons/group.png");
     }
     .sidebar button:hover#groups-button {
-        background-image: url("/icons/group-dark.png");
+        background-image: url("./icons/group-dark.png");
+    }
+
+    .sidebar button#topics-button {
+        background-image: url("./icons/topics.png");
+    }
+    .sidebar button:hover#topics-button {
+        background-image: url("./icons/topics-dark.png");
     }
     
     .sidebar button#logout-button {
-        background-image: url("/icons/signout.png");
+        background-image: url("./icons/signout.png");
     }
     .sidebar button:hover#logout-button {
-        background-image: url("/icons/signout-dark.png");
+        background-image: url("./icons/signout-dark.png");
     }
 
     #incognito-button {

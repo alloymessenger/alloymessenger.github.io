@@ -12,6 +12,7 @@ var displayedCourse;  // The course ID of the rooms displayed in the sidebar;
 var courseID;       // The course ID of the user's current chat room;
 var roomID;
 var courses = [];
+var topics = [];
 
 if (document.location.href.includes("localhost")) {
     serverURL = devServerURL;

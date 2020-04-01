@@ -67,6 +67,12 @@ function loadRecentCourses() {
     })
 }
 
+function loadRecentTopics() {
+    sockets.getUserInfo((user) => {
+        getRecentTopics(user);
+    })
+}
+
 function getColor(num) {
     if (num == 0) return "gray";
     switch (num % 3) {
@@ -80,69 +86,100 @@ function getColor(num) {
 }
 
 function getRecentCourses(user) {
-    var courses = user.courses;
+    getRecentChannels(user, "course");
+}
+
+function getRecentTopics(user) {
+    getRecentChannels(user, "topic");
+}
+
+function getRecentChannels(user, type) {
+    var channels;
+    if (type == "course") {
+        channels = user.courses;
+    } else {
+        channels = user.topics;
+    }
     var sidebarExtension = document.getElementsByClassName("sidebar-extension")[0];
     clearElements(sidebarExtension);
-    courses.forEach((course) => {
-        var color = getColor(course.num_rooms);
-        let courseButton = document.createElement("button");
-        courseButton.classList.add(color);
+    channels.forEach((channel) => {
+        var color = getColor(channel.num_rooms);
+        let channelButton = document.createElement("button");
+        channelButton.classList.add(color);
         let dot = document.createElement("span");
         dot.className = "dot";
         dot.addEventListener("click", () => {
-            removeCourse(course, () => {});
+            removeChannel(channel, () => {});
         });
-        let courseButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
+        var channelButtonHTML;
+        if (type == "course") {
+            channelButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
                                 <div class="center-container-right">
-                                    <span class="top">${course.subject} ${course.number}</span>
-                                    <span class="middle">${course.name}</span>
-                                    <span class="bottom">${course.num_rooms} Room${course.num_rooms == 1 ? "" : "s"}</span>
+                                    <span class="top">${channel.subject} ${channel.number}</span>
+                                    <span class="middle">${channel.name}</span>
+                                    <span class="bottom">${channel.num_rooms} Room${channel.num_rooms == 1 ? "" : "s"}</span>
                                 </div></div>`
-        courseButton.type = "button";
-        courseButton.dataset.id = course.course_id;
-        courseButton.innerHTML = courseButtonHTML;
-        courseButton.firstElementChild.firstElementChild.appendChild(dot);
-        courseButton.addEventListener("click", () => {
-            if (displayedCourse) {
-                sockets.leaveCourse(displayedCourse.course_id, name, () => {
-                    console.log(`Successfully left previous course.`);
+        }
+        else {
+            channelButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
+                                <div class="center-container-right">
+                                    <span class="middle">${channel.name}</span>
+                                    <span class="bottom">${channel.num_rooms} Room${channel.num_rooms == 1 ? "" : "s"}</span>
+                                </div></div>`
+        }
+        
+        channelButton.type = "button";
+        channelButton.dataset.id = channel.channel_id;
+        channelButton.innerHTML = channelButtonHTML;
+        channelButton.firstElementChild.firstElementChild.appendChild(dot);
+        channelButton.addEventListener("click", () => {
+            if (displayedChannel) {
+                sockets.leaveChannel(displayedChannel.channel_id, name, () => {
+                    console.log(`Successfully left previous channel.`);
                 });
             }
-            displayedCourse = course;
-            sockets.joinCourse(course.course_id, name, () => {
-                console.log("Successfully joined course.");
+            displayedChannel = channel;
+            sockets.joinChannel(channel.channel_id, name, () => {
+                console.log("Successfully joined channel.");
             })
-            Array.from(courseButton.parentElement.children).forEach((child) => {
+            Array.from(channelButton.parentElement.children).forEach((child) => {
                 child.classList.remove("selected");
             })
-            courseButton.classList.add("selected")
-            loadCourseRooms(course.course_id)
+            channelButton.classList.add("selected")
+            loadChannelRooms(channel.channel_id)
         });
-        sidebarExtension.appendChild(courseButton);
+        sidebarExtension.appendChild(channelButton);
     });
     var addButton = document.createElement("button");
     addButton.type = "button";
     addButton.className = "special";
     var innerText = document.createElement("span");
-    innerText.innerHTML = "Add a class...";
+    innerText.innerHTML = type == "course" ? "Add a class..." : "Create a community...";
     addButton.appendChild(innerText);
-    addButton.addEventListener("click", () => {
-        displayModal("class");
-    });
+    if (type == "course") {
+        addButton.addEventListener("click", () => {
+            displayModal("course");
+        });
+    } else {
+        addButton.addEventListener("click", () => {
+            displayModal("topic");
+        })
+    }
+    
     sidebarExtension.appendChild(addButton);
 }
 
-function loadCourseRooms(courseID) {
-    requests.getRoomsInCourse(courseID, (rooms) => {
+function loadChannelRooms(channelID) {
+    requests.getRoomsInChannel(channelID, (rooms) => {
         var sidebarExtension2 = document.getElementsByClassName("sidebar-extension second")[0];
         clearElements(sidebarExtension2);
         rooms.forEach((room) => {
             var roomButton = document.createElement("button");
             roomButton.type = "button";
             roomButton.addEventListener("click", () => {
-                setChatName(`${displayedCourse.subject} ${displayedCourse.number}`, displayedCourse.name, room.name);
-                openMessages(room.course_id, room.room_id);
-                document.getElementById("courses-button").className = "selected";
+                setChatName(`${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, room.name);
+                openMessages(room.channel_id, room.room_id);
+                document.getElementById("channels-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
                 displayMessaging();
             });
@@ -163,7 +200,7 @@ function loadCourseRooms(courseID) {
         });
         sidebarExtension2.appendChild(addButton);
     })
-    openCourseRoomsSidebar();
+    openChannelRoomsSidebar();
 }
 
 function loadRecentRooms() {
@@ -180,9 +217,9 @@ function getRecentRooms(user) {
         var roomButton = document.createElement("button");
         roomButton.type = "button";
         roomButton.addEventListener("click", () => {
-            requests.getCourseInfo(room.course_id, (course) => {
-                setChatName(`${course.subject} ${course.number}`, course.name, room.name);
-                openMessages(room.course_id, room.room_id);
+            requests.getChannelInfo(room.channel_id, (channel) => {
+                setChatName(`${channel.subject} ${channel.number}`, channel.name, room.name);
+                openMessages(room.channel_id, room.room_id);
                 document.getElementById("groups-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
                 displayMessaging();
@@ -196,26 +233,26 @@ function getRecentRooms(user) {
     });
 }
 
-function openMessages(courseID, roomID) {
+function openMessages(channelID, roomID) {
     if (inRoom) {
-        sockets.leaveRoom(window.roomID, window.courseID, name, () => {
+        sockets.leaveRoom(window.roomID, window.channelID, name, () => {
                 inRoom = false;
                 console.log("Left room successfully.")
-                sockets.joinRoom(roomID, courseID, name, () => {
+                sockets.joinRoom(roomID, channelID, name, () => {
                     window.roomID = roomID;
-                    window.courseID = courseID;
+                    window.channelID = channelID;
                     inRoom = true;
                     console.log("Joined room successfully.")
                 });
         });
     }
     else {
-        sockets.joinRoom(roomID, courseID, name, () => {
+        sockets.joinRoom(roomID, channelID, name, () => {
             inRoom = true;
             console.log("Joined room successfully.")
         })
     }
-    requests.getMessagesInRoom(courseID, roomID, (messages) => {
+    requests.getMessagesInRoom(channelID, roomID, (messages) => {
         clearMessages();
         addMessages(messages);
     });
@@ -223,15 +260,15 @@ function openMessages(courseID, roomID) {
 
 function closeMessages() {
     if (inRoom) {
-        sockets.leaveRoom(roomID, courseID, name, () => {
+        sockets.leaveRoom(roomID, channelID, name, () => {
             inRoom = false;
             console.log("Left room successfully.")
         })
     }
-    if (displayedCourse) {
-        sockets.leaveCourse(displayedCourse.course_id, name, () => {
-            displayedCourse = null;
-            console.log("Left course successfully.")
+    if (displayedChannel) {
+        sockets.leaveChannel(displayedChannel.channel_id, name, () => {
+            displayedChannel = null;
+            console.log("Left channel successfully.")
         })
     }
     return null;
@@ -243,7 +280,7 @@ function sendMessage() {
     var time = new Date().toISOString().slice(0, 19)
     if (messageField.value != '') {
         messageField.value = '';
-        sockets.messageCourse(roomID, courseID, name, photoLink, time, message, (success) => 
+        sockets.messageChannel(roomID, channelID, name, photoLink, time, message, (success) => 
             {
                 if (success) {
                     console.log("Message sent successfully.");
@@ -263,7 +300,14 @@ function openCoursesSidebar() {
     document.getElementById("main").className = "one-sidebar";
 }
 
-function openCourseRoomsSidebar() {
+function openTopicsSidebar() {
+    loadRecentTopics();
+    document.getElementsByClassName("sidebar-extension")[0].className = "sidebar-extension";
+    document.getElementsByClassName("sidebar-extension second")[0].className = "sidebar-extension second collapsed";
+    document.getElementById("main").className = "one-sidebar";
+}
+
+function openChannelRoomsSidebar() {
     document.getElementsByClassName("sidebar-extension")[0].className = "sidebar-extension";
     document.getElementsByClassName("sidebar-extension second")[0].className = "sidebar-extension second compact"
     document.getElementById("main").className = "two-sidebars";
@@ -291,15 +335,21 @@ function toggleIncognito(button) {
     else {
         button.classList.add("active");
         name = "anonymous";
-        photoLink = "/icons/incognito-profile-photo.png";
+        photoLink = "./icons/incognito-profile-photo.png";
     }
 }
 
 function displayModal(styleName) {
     document.getElementById("modal-field").value = "";
-    if (styleName == "class") {
+    if (styleName == "course") {
         fetchCourses();
         document.getElementById("modal-title").innerHTML = "Search for a class:"
+        document.getElementById("search-results").style.display = "block";
+        document.getElementById("confirm-modal").className = "search"
+    }
+    if (styleName == "topic") {
+        fetchTopics();
+        document.getElementById("modal-title").innerHTML = "Find a community:"
         document.getElementById("search-results").style.display = "block";
         document.getElementById("confirm-modal").className = "search"
     }
@@ -318,15 +368,22 @@ function hideModal() {
 function fetchCourses() {
     if (courses.length == 0) {
         requests.getCourses((courses) => {
-            addModalCourseRows(courses);
-            addBrowseCourseRows(courses);
+            addModalChannelRows(courses);
+            addBrowseChannelRows(courses);
         })
     }
 }
 
+function fetchTopics() {
+    requests.getTopics((topics) => {
+        addModalTopicRows(topics);
+        addBrowseChannelRows(topics);
+    })
+}
+
 function submitModal() {
     if (document.getElementById("confirm-modal").className == "submit") {
-        sockets.addRoom(displayedCourse.course_id, document.getElementById("modal-field").value.trim(), (result) => {
+        sockets.addRoom(displayedChannel.channelI_id, document.getElementById("modal-field").value.trim(), (result) => {
             hideModal();
         });
     }
@@ -352,26 +409,26 @@ function addRoomToSidebar(data) {
                                 <span class="bottom">Send a message...</span>`;
     roomButton.appendChild(innerText);
     roomButton.addEventListener("click", () => {
-        setChatName(`${displayedCourse.subject} ${displayedCourse.number}`, displayedCourse.name, data.roomName);
-        openMessages(displayedCourse.course_id, data.roomID);
-        document.getElementById("courses-button").className = "selected";
+        setChatName(`${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, data.roomName);
+        openMessages(displayedChannel.channelI_id, data.roomID);
+        document.getElementById("channels-button").className = "selected";
         document.getElementById("browse-button").classList.remove("selected");
         displayMessaging();
     });
     secondSidebarExtension.insertBefore(roomButton, secondSidebarExtension.firstElementChild)
 }
 
-function addModalCourseRows(courses) {
-    window.courses = courses
+function addModalChannelRows(channels) {
+    window.channels = channels
     var tableRows = document.getElementById("search-results");
-    courses.forEach((course) => {
+    channels.forEach((channel) => {
         let row = document.createElement("div");
         row.className = "modal-row";
-        let courseID = course.course_id;
-        let courseName = `${course.subject} ${course.number}`;
-        row.innerHTML = `<div class="search-result" id=${courseID}><div class="center">${courseName}</div></div>`;
+        let channelID = channel.channel_id;
+        let channelName = `${channel.subject} ${channel.number}`;
+        row.innerHTML = `<div class="search-result" id=${channelID}><div class="center">${channelName}</div></div>`;
         row.firstElementChild.addEventListener("click", () => {
-            addCourse(course, hideModal);
+            addChannel(channel, hideModal);
         });
         tableRows.appendChild(row);
     });
@@ -395,47 +452,47 @@ function getFirstName(fullName) {
     return fullName.split(" ")[0];
 }
 
-function addCourse(course, callback) {
-    sockets.addUserToCourse(course.course_id, (result) => {
+function addChannel(channel, callback) {
+    sockets.addUserToChannel(channel.channel_id, (result) => {
         if (result.success) {
             callback();
             console.log("Class successfully added.")
             var sidebarExtension = document.getElementsByClassName("sidebar-extension")[0];
-            let courseButton = document.createElement("button");
-            var color = getColor(course.num_rooms);
-            courseButton.classList.add(color);
+            let channelButton = document.createElement("button");
+            var color = getColor(channel.num_rooms);
+            channelButton.classList.add(color);
             let dot = document.createElement("span");
             dot.className = "dot";
             dot.addEventListener("click", () => {
-                removeCourse(course, () => {});
+                removeChannel(channel, () => {});
             });
-            let courseButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
+            let channelButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
                                     <div class="center-container-right">
-                                        <span class="top">${course.subject} ${course.number}</span>
-                                        <span class="middle">${course.name}</span>
-                                        <span class="bottom">${course.num_rooms} Rooms</span>
+                                        <span class="top">${channel.subject} ${channel.number}</span>
+                                        <span class="middle">${channel.name}</span>
+                                        <span class="bottom">${channel.num_rooms} Rooms</span>
                                     </div></div>`
-            courseButton.type = "button";
-            courseButton.dataset.id = course.course_id;
-            courseButton.innerHTML = courseButtonHTML;
-            courseButton.firstElementChild.firstElementChild.appendChild(dot);
-            courseButton.addEventListener("click", () => {
-                if (displayedCourse) {
-                    sockets.leaveCourse(displayedCourse.course_id, name, () => {
-                        console.log(`Successfully left previous course.`);
+            channelButton.type = "button";
+            channelButton.dataset.id = channel.channel_id;
+            channelButton.innerHTML = channelButtonHTML;
+            channelButton.firstElementChild.firstElementChild.appendChild(dot);
+            channelButton.addEventListener("click", () => {
+                if (displayedChannel) {
+                    sockets.leaveChannel(displayedChannel.channel_id, name, () => {
+                        console.log(`Successfully left previous channel.`);
                     });
                 }
-                displayedCourse = course;
-                sockets.joinCourse(course.course_id, name, () => {
-                    console.log("Successfully joined course.");
+                displayedChannel = channel;
+                sockets.joinChannel(channel.channel_id, name, () => {
+                    console.log("Successfully joined channel.");
                 })
-                Array.from(courseButton.parentElement.children).forEach((child) => {
+                Array.from(channelButton.parentElement.children).forEach((child) => {
                     child.classList.remove("selected");
                 })
-                courseButton.classList.add("selected");
-                loadCourseRooms(course.course_id)
+                channelButton.classList.add("selected");
+                loadChannelRooms(channel.channel_id)
             });
-            sidebarExtension.insertBefore(courseButton, sidebarExtension.firstElementChild)
+            sidebarExtension.insertBefore(channelButton, sidebarExtension.firstElementChild)
         }
         else {
             console.log(result.error);
@@ -443,13 +500,13 @@ function addCourse(course, callback) {
     });
 }
 
-function removeCourse(course, callback) {
-    sockets.removeUserFromCourse(course.course_id, (result) => {
+function removeChannel(channel, callback) {
+    sockets.removeUserFromChannel(channel.channel_id, (result) => {
         if (result.success) {
             callback();
             console.log("Class successfully removed.")
             let sidebarExtension = document.getElementsByClassName("sidebar-extension")[0];
-            sidebarExtension.removeChild(sidebarExtension.querySelectorAll(`[data-id='${course.course_id}']`)[0]);
+            sidebarExtension.removeChild(sidebarExtension.querySelectorAll(`[data-id='${channel.channel_id}']`)[0]);
         }
         else {
             console.log(result.error);
@@ -457,62 +514,62 @@ function removeCourse(course, callback) {
     })
 }
 
-function setChatName(courseNumber, courseName, roomName) {
-    document.getElementById("class-name").innerHTML = `<b>${courseNumber}</b>: ${courseName}`;
+function setChatName(channelNumber, channelName, roomName) {
+    document.getElementById("class-name").innerHTML = `<b>${channelNumber}</b>: ${channelName}`;
     document.getElementById("group-name").innerHTML = roomName;
 }
 
 function displayBrowse() {
     document.getElementById("messaging").classList.add("hidden");
     document.getElementById("browse").classList.remove("hidden");
-    fetchCourses();
+    fetchChannels();
 }
 
 function displayMessaging() {
     document.getElementById("messaging").classList.remove("hidden");
     document.getElementById("browse").classList.add("hidden");
-    fetchCourses();
+    fetchChannels();
 }
 
-function addBrowseCourseRows(classes) {
+function addBrowseChannelRows(classes) {
     var tableRows = document.getElementById("table-rows");
     sockets.getUserInfo((user) => {
-        let selectedCourses = user.courses;
-        classes.forEach((course) => {
+        let selectedChannels = user.channels;
+        classes.forEach((channel) => {
             let div = document.createElement("div");
             let button = document.createElement("button");
-            if (selectedCourses.some(e => e.course_id === course.course_id)) {
+            if (selectedChannels.some(e => e.channel_id === channel.channel_id)) {
                 button.className = "select check";
             }
             else {
                 button.className = "select add";
             }
             button.addEventListener("click", () => {
-                browseButtonClick(button, course);
+                browseButtonClick(button, channel);
             })
             div.appendChild(button);
             let row = document.createElement("div");
             row.className = "browse-row";
             let tableRow = document.createElement("li");
             tableRow.className = "table-row";
-            tableRow.id = course.course_id;
-            tableRow.innerHTML = `<div class="col-1">${course.subject}</div>
-                                    <div class="col-2">${course.number}</div>
-                                    <div class="col-3">${course.name}</div>`;
+            tableRow.id = channel.channel_id;
+            tableRow.innerHTML = `<div class="col-1">${channel.subject}</div>
+                                    <div class="col-2">${channel.number}</div>
+                                    <div class="col-3">${channel.name}</div>`;
             tableRow.appendChild(button);
             row.appendChild(tableRow);
             tableRows.appendChild(row);
         });
     })
 
-    function browseButtonClick(button, course) {
+    function browseButtonClick(button, channel) {
         if (button.className == "select add") {
-            addCourse(course, () => {
+            addChannel(channel, () => {
                 button.className = "select check";
             });
         }
         else if (button.className == "select check") {
-            removeCourse(course, () => {
+            removeChannel(channel, () => {
                 button.className = "select add";
             });
         }
