@@ -71,58 +71,58 @@ sockets = function() {
     function unregisterMessageHandler() {
         socket.off('message');
     }
-    function registerAssignmentHandler() {
+    function registerRoomHandler() {
         socket.on('new_room', (data) => {
-            addAssignmentToSidebar(data);
+            addRoomToSidebar(data);
         })
     }
-    function unregisterAssignmentHandler() {
+    function unregisterRoomHandler() {
         socket.off('new_room');
     }
-    function joinCourse(courseID, name, callback) {
-        socket.emit('join_course', {courseID, name}, callback);
-        registerAssignmentHandler();
+    function joinChannel(channelID, name, callback) {
+        socket.emit('join_channel', {channelID, name}, callback);
+        registerRoomHandler();
     }
-    function leaveCourse(courseID, name, callback) {
-        socket.emit('leave_course', {courseID, name}, callback);
-        unregisterAssignmentHandler();
+    function leaveChannel(channelID, name, callback) {
+        socket.emit('leave_channel', {channelID, name}, callback);
+        unregisterRoomHandler();
     }
-    function joinAssignment(roomID, courseID, name, callback) {
+    function joinRoom(roomID, channelID, name, callback) {
         window.roomID = roomID;
-        window.courseID = courseID;
-        socket.emit('join_room', {roomID, courseID, name}, callback)
+        window.channelID = channelID;
+        socket.emit('join_room', {roomID, channelID, name}, callback)
         registerMessageHandler();
     }
-    function leaveAssignment(roomID, courseID, name, callback) {
-        socket.emit('leave_room', {roomID, courseID, name}, callback)
+    function leaveRoom(roomID, channelID, name, callback) {
+        socket.emit('leave_room', {roomID, channelID, name}, callback)
         unregisterMessageHandler();
     }
-    function messageCourse(roomID, courseID, name, photoLink, time, message, callback) {
-        socket.emit('message', {roomID, courseID, name, photoLink, time, message}, callback)
+    function messageChannel(roomID, channelID, name, photoLink, time, message, callback) {
+        socket.emit('message', {roomID, channelID, name, photoLink, time, message}, callback)
     }
-    function addAssignment(courseID, roomName, callback) {
-        socket.emit('new_room', {courseID, roomName}, callback)
+    function addRoom(channelID, roomName, callback) {
+        socket.emit('new_room', {channelID, roomName}, callback)
     }
     function getUserInfo(callback) {
         socket.emit('get_user_info', callback)
     }
-    function addUserToCourse(courseID, callback) {
-        socket.emit('add_user_to_course', {courseID}, callback)
+    function addUserToChannel(channelID, callback) {
+        socket.emit('add_user_to_channel', {channelID}, callback)
     }
-    function removeUserFromCourse(courseID, callback) {
-        socket.emit('remove_user_from_course', {courseID}, callback)
+    function removeUserFromChannel(channelID, callback) {
+        socket.emit('remove_user_from_channel', {channelID}, callback)
     }
 
     return {
         init: init,
-        joinCourse: joinCourse,
-        leaveCourse: leaveCourse,
-        joinAssignment: joinAssignment,
-        leaveAssignment: leaveAssignment,
-        messageCourse: messageCourse,
-        addAssignment: addAssignment,
+        joinChannel: joinChannel,
+        leaveChannel: leaveChannel,
+        joinRoom: joinRoom,
+        leaveRoom: leaveRoom,
+        messageChannel: messageChannel,
+        addRoom: addRoom,
         getUserInfo: getUserInfo,
-        addUserToCourse: addUserToCourse,
-        removeUserFromCourse: removeUserFromCourse
+        addUserToChannel: addUserToChannel,
+        removeUserFromChannel: removeUserFromChannel
     }
 }();
