@@ -146,7 +146,7 @@
             document.getElementById("topics-button").classList.remove("selected");
             document.getElementById("courses-button").classList.remove("selected");
             displayMessaging();
-            openAssignmentsSidebar();
+            openRoomsSidebar();
         });
         document.getElementById("logout-button").addEventListener("click", signOut);
         document.getElementById("modal-field").addEventListener("keyup", () => {
@@ -154,6 +154,11 @@
                 filter();
             }
         })
+        document.getElementById("modal-field").addEventListener("keyup", (event) => {
+            if (event.key === "Enter") {
+                submitModal();
+            }
+        });
     </script>
 </body>
 </html>

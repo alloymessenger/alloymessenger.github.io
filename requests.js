@@ -15,7 +15,7 @@ requests = function () {
     function getTopics(callback) {
         let req = new XMLHttpRequest();
         let topicsURL = `${serverURL}/api/topics/`;
-        req.open("GET", classesURL, true);
+        req.open("GET", topicsURL, true);
         req.onreadystatechange = (e) => {
             if (req.readyState == 4 && req.status == 200) {
                 topics = JSON.parse(req.responseText);

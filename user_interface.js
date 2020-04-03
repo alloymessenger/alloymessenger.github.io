@@ -182,8 +182,9 @@ function loadChannelRooms(channelID) {
             roomButton.addEventListener("click", () => {
                 setChatName(`${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, room.name);
                 openMessages(room.channel_id, room.room_id);
-                document.getElementById("channels-button").className = "selected";
+                document.getElementById("groups-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
+                document.getElementById("topics-button").classList.remove("selected");
                 displayMessaging();
             });
             var innerText = document.createElement("div");
@@ -225,6 +226,7 @@ function getRecentRooms(user) {
                 openMessages(room.channel_id, room.room_id);
                 document.getElementById("groups-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
+                document.getElementById("topics-button").classList.remove("selected");
                 displayMessaging();
             })
         });
@@ -346,20 +348,20 @@ function displayModal(styleName) {
     document.getElementById("modal-field").value = "";
     if (styleName == "course") {
         fetchCourses();
-        document.getElementById("modal-title").innerHTML = "Search for a class:"
+        document.getElementById("modal-title").innerHTML = "Search for a class:";
         document.getElementById("search-results").style.display = "block";
-        document.getElementById("confirm-modal").className = "search"
+        document.getElementById("confirm-modal").className = "search";
     }
     if (styleName == "topic") {
         fetchTopics();
-        document.getElementById("modal-title").innerHTML = "Find a community:"
+        document.getElementById("modal-title").innerHTML = "Find/create a community:";
         document.getElementById("search-results").style.display = "block";
-        document.getElementById("confirm-modal").className = "search"
+        document.getElementById("confirm-modal").className = "submit";
     }
     else if (styleName == "room") {
-        document.getElementById("modal-title").innerHTML = "Enter room name:"
+        document.getElementById("modal-title").innerHTML = "Enter room name:";
         document.getElementById("search-results").style.display = "none";
-        document.getElementById("confirm-modal").className = "submit"
+        document.getElementById("confirm-modal").className = "submit";
     }
     document.getElementById("modal").style.display = "block";
 }
@@ -371,7 +373,7 @@ function hideModal() {
 function fetchCourses() {
     if (courses.length == 0) {
         requests.getCourses((courses) => {
-            addModalChannelRows(courses);
+            addModalCourseRows(courses);
             addBrowseCourseRows(courses);
         })
     }
@@ -386,9 +388,18 @@ function fetchTopics() {
 
 function submitModal() {
     if (document.getElementById("confirm-modal").className == "submit") {
-        sockets.addRoom(displayedChannel.channel_id, document.getElementById("modal-field").value.trim(), (result) => {
-            hideModal();
-        });
+        if (document.getElementById("modal-title").innerHTML == "Find/create a community:") {
+            sockets.addTopic(document.getElementById("modal-field").value.trim(), (result) => {
+                if (result.success) {
+                    hideModal();
+                }
+            })
+        }
+        else {
+            sockets.addRoom(displayedChannel.channel_id, document.getElementById("modal-field").value.trim(), (result) => {
+                hideModal();
+            });
+        }
     }
 }
 
@@ -414,21 +425,31 @@ function addRoomToSidebar(data) {
     roomButton.addEventListener("click", () => {
         setChatName(`${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, data.roomName);
         openMessages(displayedChannel.channel_id, data.roomID);
-        document.getElementById("channels-button").className = "selected";
+        document.getElementById("groups-button").className = "selected";
         document.getElementById("browse-button").classList.remove("selected");
+        document.getElementById("classes-button").classList.remove("selected");
         displayMessaging();
     });
     secondSidebarExtension.insertBefore(roomButton, secondSidebarExtension.firstElementChild)
 }
 
-function addModalChannelRows(channels) {
+function addModalCourseRows(courses) {
+    addModalChannelRows(courses, "course");
+}
+
+function addModalTopicRows(topics) {
+    addModalChannelRows(topics, "topic");
+}
+
+function addModalChannelRows(channels, type) {
     window.channels = channels
     var tableRows = document.getElementById("search-results");
+    tableRows.innerHTML = "";
     channels.forEach((channel) => {
         let row = document.createElement("div");
         row.className = "modal-row";
         let channelID = channel.channel_id;
-        let channelName = `${channel.subject} ${channel.number}`;
+        let channelName = type == "course" ? `${channel.subject} ${channel.number}` : channel.name;
         row.innerHTML = `<div class="search-result" id=${channelID}><div class="center">${channelName}</div></div>`;
         row.firstElementChild.addEventListener("click", () => {
             addChannel(channel, hideModal);
@@ -525,13 +546,13 @@ function setChatName(channelNumber, channelName, roomName) {
 function displayBrowse() {
     document.getElementById("messaging").classList.add("hidden");
     document.getElementById("browse").classList.remove("hidden");
-    fetchChannels();
+    fetchCourses();
 }
 
 function displayMessaging() {
     document.getElementById("messaging").classList.remove("hidden");
     document.getElementById("browse").classList.add("hidden");
-    fetchChannels();
+    fetchCourses();
 }
 
 function addBrowseTopicRows(topics) {

@@ -184,7 +184,7 @@ button:hover {
 }
 
 .sidebar-extension button.selected.orange span:hover.dot {
-    background-image: url(delete-orange.png");
+    background-image: url("./icons/delete-orange.png");
 }
 
 .sidebar-extension button.selected span.dot {
