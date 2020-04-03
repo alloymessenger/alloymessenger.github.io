@@ -386,7 +386,7 @@ function fetchTopics() {
 
 function submitModal() {
     if (document.getElementById("confirm-modal").className == "submit") {
-        sockets.addRoom(displayedChannel.channelI_id, document.getElementById("modal-field").value.trim(), (result) => {
+        sockets.addRoom(displayedChannel.channel_id, document.getElementById("modal-field").value.trim(), (result) => {
             hideModal();
         });
     }
@@ -413,7 +413,7 @@ function addRoomToSidebar(data) {
     roomButton.appendChild(innerText);
     roomButton.addEventListener("click", () => {
         setChatName(`${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, data.roomName);
-        openMessages(displayedChannel.channelI_id, data.roomID);
+        openMessages(displayedChannel.channel_id, data.roomID);
         document.getElementById("channels-button").className = "selected";
         document.getElementById("browse-button").classList.remove("selected");
         displayMessaging();
