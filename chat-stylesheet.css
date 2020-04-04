@@ -27,8 +27,8 @@ button:hover {
 .logo-small {
     display: block;
     margin-left: 10px;
-    height: 60px;
-    width: 60px;
+    height: 55px;
+    width: 55px;
     padding: 10px 10px;
 }
 
@@ -38,7 +38,7 @@ button:hover {
     background-color: rgba(0, 0, 0, 0);
     border: none;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     font-family: 'Quicksand', sans-serif;
     color: white;
@@ -99,7 +99,7 @@ button:hover {
     overflow: hidden;
     position: relative;
     width: 100%;
-    min-height: 130px;
+    min-height: 120px;
     transition: 0.3s;
 }
 
@@ -252,7 +252,7 @@ button:hover {
 
 .sidebar-extension button .middle {
     display: block;
-    font-size: 18px;
+    font-size: 17px;
     text-overflow: ellipsis;
     overflow: hidden;
 }

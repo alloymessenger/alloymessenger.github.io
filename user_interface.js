@@ -396,6 +396,7 @@ function submitModal() {
             sockets.addTopic(document.getElementById("modal-field").value.trim(), (result) => {
                 if (result.success) {
                     hideModal();
+                    addTopicToSidebar(result.data.channel);
                 }
             })
         }
@@ -445,6 +446,39 @@ function addRoomToSidebar(data) {
         displayMessaging();
     });
     secondSidebarExtension.insertBefore(roomButton, secondSidebarExtension.firstElementChild)
+}
+
+function addTopicToSidebar(channel) {
+    var sidebarExtension = document.getElementsByClassName("sidebar-extension")[0];
+    var color = getColor(channel.num_rooms);
+    let newTopicButton = document.createElement("button");
+    newTopicButton.classList.add(color);
+    let dot = document.createElement("span");
+    dot.className = "dot";
+    dot.addEventListener("click", () => {
+        removeChannel(channel, () => {});
+    });
+    var newTopicButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
+                            <div class="center-container-right">
+                                <span class="middle">${channel.name}</span>
+                                <span class="bottom">${channel.num_rooms} Room${channel.num_rooms == 1 ? "" : "s"}</span>
+                            </div></div>`;
+    newTopicButton.type = "button";
+    newTopicButton.dataset.id = channel.channel_id;
+    newTopicButton.innerHTML = newTopicButtonHTML;
+    newTopicButton.firstElementChild.firstElementChild.appendChild(dot);
+    newTopicButton.addEventListener("click", () => {
+        displayedChannel = channel;
+        sockets.joinChannel(channel.channel_id, name, () => {
+            console.log("Successfully joined channel.");
+        })
+        Array.from(newTopicButton.parentElement.children).forEach((child) => {
+            child.classList.remove("selected");
+        })
+        newTopicButton.classList.add("selected")
+        loadChannelRooms(channel.channel_id)
+    });
+    sidebarExtension.insertBefore(newTopicButton, sidebarExtension.firstElementChild)
 }
 
 function addModalCourseRows(courses) {
@@ -504,12 +538,22 @@ function addChannel(channel, callback) {
             dot.addEventListener("click", () => {
                 removeChannel(channel, () => {});
             });
-            let channelButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
+            let channelButtonHTML;
+            if (channel.is_class) {
+                channelButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
                                     <div class="center-container-right">
                                         <span class="top">${channel.subject} ${channel.number}</span>
                                         <span class="middle">${channel.name}</span>
-                                        <span class="bottom">${channel.num_rooms} Rooms</span>
+                                        <span class="bottom">${channel.num_rooms} Room${channel.num_rooms == 1 ? "" : "s"}</span>
                                     </div></div>`
+            }
+            else {
+                channelButtonHTML = `<div class="selected-container"><div class="center-container-left"></div>
+                                    <div class="center-container-right">
+                                        <span class="middle">${channel.name}</span>
+                                        <span class="bottom">${channel.num_rooms} Room${channel.num_rooms == 1 ? "" : "s"}</span>
+                                    </div></div>`
+            }
             channelButton.type = "button";
             channelButton.dataset.id = channel.channel_id;
             channelButton.innerHTML = channelButtonHTML;

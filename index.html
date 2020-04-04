@@ -156,7 +156,7 @@
         });
         document.getElementById("logout-button").addEventListener("click", signOut);
         document.getElementById("modal-field").addEventListener("keyup", () => {
-            if (document.getElementById("confirm-modal").className == "search") {
+            if (document.getElementById("confirm-modal").className == "search" || document.getElementById("modal-title").innerHTML == "Find/create a community:") {
                 filter();
             }
         })
