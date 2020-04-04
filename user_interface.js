@@ -180,7 +180,7 @@ function loadChannelRooms(channelID) {
             var roomButton = document.createElement("button");
             roomButton.type = "button";
             roomButton.addEventListener("click", () => {
-                setChatName(`${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, room.name);
+                setChatName(displayedChannel.is_class, `${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, room.name);
                 openMessages(room.channel_id, room.room_id);
                 document.getElementById("groups-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
@@ -222,7 +222,7 @@ function getRecentRooms(user) {
         roomButton.type = "button";
         roomButton.addEventListener("click", () => {
             requests.getChannelInfo(room.channel_id, (channel) => {
-                setChatName(`${channel.subject} ${channel.number}`, channel.name, room.name);
+                setChatName(channel.is_class, `${channel.subject} ${channel.number}`, channel.name, room.name);
                 openMessages(room.channel_id, room.room_id);
                 document.getElementById("groups-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
@@ -423,11 +423,11 @@ function addRoomToSidebar(data) {
                                 <span class="bottom">Send a message...</span>`;
     roomButton.appendChild(innerText);
     roomButton.addEventListener("click", () => {
-        setChatName(`${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, data.roomName);
+        setChatName(displayedChannel.is_class, `${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, data.roomName);
         openMessages(displayedChannel.channel_id, data.roomID);
         document.getElementById("groups-button").className = "selected";
         document.getElementById("browse-button").classList.remove("selected");
-        document.getElementById("classes-button").classList.remove("selected");
+        document.getElementById("courses-button").classList.remove("selected");
         displayMessaging();
     });
     secondSidebarExtension.insertBefore(roomButton, secondSidebarExtension.firstElementChild)
@@ -538,9 +538,15 @@ function removeChannel(channel, callback) {
     })
 }
 
-function setChatName(channelNumber, channelName, roomName) {
-    document.getElementById("class-name").innerHTML = `<b>${channelNumber}</b>: ${channelName}`;
-    document.getElementById("group-name").innerHTML = roomName;
+function setChatName(isClass, channelNumber, channelName, roomName) {
+    if (isClass) {
+        document.getElementById("class-name").innerHTML = `<b>${channelNumber}</b>: ${channelName}`;
+        document.getElementById("group-name").innerHTML = roomName;
+    }
+    else {
+        document.getElementById("class-name").innerHTML = `<b>${channelName}</b>`;
+        document.getElementById("group-name").innerHTML = roomName;
+    }
 }
 
 function displayBrowse() {
