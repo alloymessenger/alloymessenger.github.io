@@ -133,11 +133,6 @@ function getRecentChannels(user, type) {
         channelButton.innerHTML = channelButtonHTML;
         channelButton.firstElementChild.firstElementChild.appendChild(dot);
         channelButton.addEventListener("click", () => {
-            if (displayedChannel) {
-                sockets.leaveChannel(displayedChannel.channel_id, name, () => {
-                    console.log(`Successfully left previous channel.`);
-                });
-            }
             displayedChannel = channel;
             sockets.joinChannel(channel.channel_id, name, () => {
                 console.log("Successfully joined channel.");
@@ -154,7 +149,7 @@ function getRecentChannels(user, type) {
     addButton.type = "button";
     addButton.className = "special";
     var innerText = document.createElement("span");
-    innerText.innerHTML = type == "course" ? "Add a class..." : "Create a community...";
+    innerText.innerHTML = type == "course" ? "Add a class..." : "Join a community...";
     addButton.appendChild(innerText);
     if (type == "course") {
         addButton.addEventListener("click", () => {
@@ -182,9 +177,17 @@ function loadChannelRooms(channelID) {
             roomButton.addEventListener("click", () => {
                 setChatName(displayedChannel.is_class, `${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, room.name);
                 openMessages(room.channel_id, room.room_id);
-                document.getElementById("groups-button").className = "selected";
-                document.getElementById("browse-button").classList.remove("selected");
-                document.getElementById("topics-button").classList.remove("selected");
+                if (displayedChannel.is_class) {
+                    document.getElementById("courses-button").className = "selected";
+                    document.getElementById("browse-button").classList.remove("selected");
+                    document.getElementById("topics-button").classList.remove("selected");
+                    document.getElementById("groups-button").classList.remove("selected");
+                } else {
+                    document.getElementById("topics-button").className = "selected";
+                    document.getElementById("browse-button").classList.remove("selected");
+                    document.getElementById("courses-button").classList.remove("selected");
+                    document.getElementById("groups-button").classList.remove("selected");
+                }
                 displayMessaging();
             });
             var innerText = document.createElement("div");
@@ -227,6 +230,7 @@ function getRecentRooms(user) {
                 document.getElementById("groups-button").className = "selected";
                 document.getElementById("browse-button").classList.remove("selected");
                 document.getElementById("topics-button").classList.remove("selected");
+                document.getElementById("courses-button").classList.remove("selected");
                 displayMessaging();
             })
         });
@@ -422,12 +426,22 @@ function addRoomToSidebar(data) {
         innerText.innerHTML = `<span class="top">${data.roomName}</span>
                                 <span class="bottom">Send a message...</span>`;
     roomButton.appendChild(innerText);
+    let currentDisplayedChannel = displayedChannel;
     roomButton.addEventListener("click", () => {
-        setChatName(displayedChannel.is_class, `${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, data.roomName);
-        openMessages(displayedChannel.channel_id, data.roomID);
-        document.getElementById("groups-button").className = "selected";
-        document.getElementById("browse-button").classList.remove("selected");
-        document.getElementById("courses-button").classList.remove("selected");
+        setChatName(currentDisplayedChannel.is_class, `${currentDisplayedChannel.subject} ${currentDisplayedChannel.number}`, currentDisplayedChannel.name, data.roomName);
+        openMessages(currentDisplayedChannel.channel_id, data.roomID);
+        
+        if (currentDisplayedChannel.is_class) {
+            document.getElementById("courses-button").className = "selected";
+            document.getElementById("browse-button").classList.remove("selected");
+            document.getElementById("topics-button").classList.remove("selected");
+            document.getElementById("groups-button").classList.remove("selected");
+        } else {
+            document.getElementById("topics-button").classList = "selected";
+            document.getElementById("browse-button").classList.remove("selected");
+            document.getElementById("courses-button").className.remove("selected");
+            document.getElementById("groups-button").classList.remove("selected");
+        }
         displayMessaging();
     });
     secondSidebarExtension.insertBefore(roomButton, secondSidebarExtension.firstElementChild)
@@ -501,11 +515,6 @@ function addChannel(channel, callback) {
             channelButton.innerHTML = channelButtonHTML;
             channelButton.firstElementChild.firstElementChild.appendChild(dot);
             channelButton.addEventListener("click", () => {
-                if (displayedChannel) {
-                    sockets.leaveChannel(displayedChannel.channel_id, name, () => {
-                        console.log(`Successfully left previous channel.`);
-                    });
-                }
                 displayedChannel = channel;
                 sockets.joinChannel(channel.channel_id, name, () => {
                     console.log("Successfully joined channel.");
