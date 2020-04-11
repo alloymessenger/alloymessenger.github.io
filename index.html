@@ -66,7 +66,7 @@
         <button type="button" id="browse-button">Browse</button>
         <button type="button" class="selected" id="courses-button">My courses</button>
         <button type="button" id="topics-button">My topics</button>
-        <button type="button" id="groups-button">My channels</button>
+        <button type="button" id="groups-button">My rooms</button>
         <button type="button" id="logout-button">Sign out</button>
         <div class="container">
             <label class="switch" for="checkbox">
@@ -81,10 +81,16 @@
     <div id="modal">
         <div id="modal-content">
             <h1 id="modal-title">Search for a class:</h1><button class="close" onclick="hideModal()">&times;</button>
-            <div style="display: inline-block"><div id="modal-info">
-                <input id="modal-field" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            <div style="display: inline-block"><div class="modal-info">
+                <input class="modal-field" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                 onkeyup="" placeholder="Enter a name..." maxlength="50">
                 <button id="confirm-modal" onclick="submitModal()">
+            </div></div>
+        </div>
+        <div id="description-container">
+            <div style="display: inline-block"><div class="modal-info">
+                <textarea class="modal-field long" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                onkeyup="" placeholder="Enter a description (optional)..." maxlength="250"></textarea>
             </div></div>
         </div>
         <div id="search-results"></div>
@@ -155,15 +161,28 @@
             openRoomsSidebar();
         });
         document.getElementById("logout-button").addEventListener("click", signOut);
-        document.getElementById("modal-field").addEventListener("keyup", () => {
+        document.getElementsByClassName("modal-field")[0].addEventListener("keyup", () => {
             if (document.getElementById("confirm-modal").className == "search" || document.getElementById("modal-title").innerHTML == "Find/create a community:") {
                 filter();
             }
         })
-        document.getElementById("modal-field").addEventListener("keyup", (event) => {
+        document.getElementsByClassName("modal-field")[0].addEventListener("keyup", (event) => {
             if (event.key === "Enter") {
                 submitModal();
             }
+            if (event.key === "Tab") {
+                document.getElementsByClassName("modal-field long")[0].focus();
+                document.getElementsByClassName("modal-field long")[0].select();
+                return false;
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            notificationsOn = false;
+            clearNotifications();
+        });
+        window.addEventListener('blur', () => {
+            notificationsOn = true;
         });
     </script>
 </body>

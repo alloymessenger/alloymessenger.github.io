@@ -13,6 +13,7 @@ var channelID;       // The course ID of the user's current chat room;
 var roomID;
 var courses = [];
 var topics = [];
+var unreadCount = 0;
 
 if (document.location.href.includes("localhost")) {
     serverURL = devServerURL;

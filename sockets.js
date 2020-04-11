@@ -81,7 +81,7 @@ sockets = function() {
     }
     function joinChannel(channelID, name, callback) {
         if (displayedChannel) {
-            sockets.leaveChannel(displayedChannel.channel_id, name, () => {
+            leaveChannel(displayedChannel.channel_id, name, () => {
                 console.log(`Successfully left previous channel.`);
                 socket.emit('join_channel', {channelID, name}, callback);
                 registerRoomHandler();
@@ -109,8 +109,8 @@ sockets = function() {
     function messageChannel(roomID, channelID, name, photoLink, time, message, callback) {
         socket.emit('message', {roomID, channelID, name, photoLink, time, message}, callback)
     }
-    function addRoom(channelID, roomName, callback) {
-        socket.emit('new_room', {channelID, roomName}, callback)
+    function addRoom(channelID, roomName, description, callback) {
+        socket.emit('new_room', {channelID, roomName, description}, callback)
     }
     function addTopic(topicName, callback) {
         socket.emit('new_topic', {topicName}, callback);

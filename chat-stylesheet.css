@@ -586,7 +586,7 @@ textarea:focus, input:focus {
     display: table;
     margin: 4px 5px 0px auto;
     right: 0;
-    background: #C4357F; /* #1B998B */
+    background: #1B998B;
     color: white;
     border-radius: 20px;
     padding: 5px 15px;
@@ -612,6 +612,11 @@ textarea:focus, input:focus {
 
 #modal {
     display: none;
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    margin-left: -150px;
+    z-index: 4;
 }
 
 #modal-content {
@@ -621,7 +626,7 @@ textarea:focus, input:focus {
     height: 100px;
     box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.2);
     border-radius: 15px;
-    background-color: rgb(53, 53, 53);
+    background-color: rgb(47, 47, 47);
     color: white;
     vertical-align: middle;
     display: inline-block;
@@ -637,7 +642,7 @@ textarea:focus, input:focus {
     float: left;
 }
 
-#modal-info {
+.modal-info {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -652,7 +657,7 @@ textarea:focus, input:focus {
     border: none;
 }
 
-#modal-field {
+.modal-field {
     margin: auto;
     border: none;
     width: 200px;
@@ -668,7 +673,55 @@ textarea:focus, input:focus {
     vertical-align: center;
 }
 
-#modal-field::placeholder {
+#description-container {
+    position: relative;
+    display: block;
+    background-color: rgb(60, 60, 60);
+    width: 300px;
+    height: 95px;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    margin: -20px auto 0px auto;
+    padding: 25px 0px 5px 0px;
+    z-index: 2;
+}
+
+.modal-field.long {
+    width: 250px;
+    height: 55px;
+    padding: 10px 10px;
+    line-height: 20px;
+    resize: none;
+    background-color: rgb(50, 50, 50);
+    border-radius: 12px;
+    margin-top: 10px;
+
+}
+
+.modal-field.long:hover::-webkit-scrollbar {
+    visibility: visible;
+    transition: 0.5s;
+}
+
+.modal-field.long:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+    transition: 0.5s;
+}
+
+.modal-field.long::-webkit-scrollbar {
+    width: 3px;
+    visibility: hidden;
+}
+
+.modal-field.long::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.4);
+    visibility: hidden;
+}
+
+.modal-field::placeholder {
     color: rgb(230, 230, 230)
 }
 
