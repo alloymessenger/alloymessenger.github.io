@@ -21,8 +21,8 @@ button:hover {
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 10px;
-    height: 150px;
-    width: 150px;
+    height: 110px;
+    width: 110px;
     vertical-align: middle;
 }
 
@@ -31,7 +31,7 @@ button:hover {
     display: inline;
     text-align: center;
     font-family: 'Quicksand', sans-serif;
-    font-size: 150px;
+    font-size: 110px;
     font-weight: normal;
     text-shadow: 3px 3px rgba(0, 0, 0, 0.3);
     vertical-align: middle;
@@ -42,9 +42,9 @@ button:hover {
     margin: 0;
     width: 100%;
     position: absolute;
-    top: 20%;
+    top: 5%;
     left: 50%;
-    transform: translate(-50%, -20%);
+    transform: translate(-50%, -5%);
 }
 
 .bottom-right {

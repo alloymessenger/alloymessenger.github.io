@@ -14,6 +14,7 @@ var roomID;
 var courses = [];
 var topics = [];
 var unreadCount = 0;
+var notificationsOn = false;
 
 if (document.location.href.includes("localhost")) {
     serverURL = devServerURL;

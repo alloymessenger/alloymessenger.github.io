@@ -681,6 +681,7 @@ textarea:focus, input:focus {
     height: 95px;
     font-family: 'Roboto', sans-serif;
     color: white;
+    box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.2);
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     margin: -20px auto 0px auto;
