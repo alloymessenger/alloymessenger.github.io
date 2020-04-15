@@ -443,6 +443,79 @@ button:hover {
     max-width: 40%;
 }
 
+#main #description {
+    position: absolute;
+    background-color: rgb(40, 40, 40);
+    top: 50px;
+    left: 0px;
+    height: 0px;
+    right: 0px;
+    overflow-y: scroll;
+    transition: 0.3s;
+    transition-delay: 0.1s;
+}
+
+#main #description textarea {
+    background-color: rgba(0, 0, 0, 0);
+    display: block;
+    position: relative;
+    color: rgb(245, 245, 245);
+    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    line-height: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 20px 20px;
+    box-sizing: border-box;
+    text-overflow: wrap;
+    width: 100%;
+    padding: 10px 10px;
+    line-height: 20px;
+    resize: none;
+    border: none;
+}
+
+#main #description textarea::-webkit-scrollbar {
+    width: 3px;
+    visibility: hidden;
+}
+#main #description textarea::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.4);
+    visibility: hidden;
+}
+
+#main #description:hover::-webkit-scrollbar {
+    visibility: visible;
+    transition: 0.5s;
+}
+
+#main #description:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+    transition: 0.5s;
+}
+
+#main #description::-webkit-scrollbar {
+    width: 3px;
+    visibility: hidden;
+}
+#main #description::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.4);
+    visibility: hidden;
+}
+
+#main #description:hover::-webkit-scrollbar {
+    visibility: visible;
+    transition: 0.5s;
+}
+
+#main #description:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+    transition: 0.5s;
+}
+
+
 #main #message-holder {
     position: absolute;
     top: 50px;
@@ -452,6 +525,8 @@ button:hover {
     overflow-y: scroll;
     padding-top: 5px;
     padding-bottom: 5px;
+    transition: 0.3s;
+    transition-delay: 0.1s;
 }
 
 #message-holder::-webkit-scrollbar {
