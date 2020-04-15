@@ -116,7 +116,10 @@ sockets = function() {
         socket.emit('new_topic', {topicName}, callback);
     }
     function getUserInfo(callback) {
-        socket.emit('get_user_info', callback)
+        socket.emit('get_user_info', callback);
+    }
+    function getRoomsInChannel(channel_id, callback) {
+        socket.emit('get_rooms_in_channel', {channel_id}, callback);
     }
     function addUserToChannel(channelID, callback) {
         socket.emit('add_user_to_channel', {channelID}, callback)
@@ -135,6 +138,7 @@ sockets = function() {
         addRoom: addRoom,
         addTopic: addTopic,
         getUserInfo: getUserInfo,
+        getRoomsInChannel: getRoomsInChannel,
         addUserToChannel: addUserToChannel,
         removeUserFromChannel: removeUserFromChannel
     }

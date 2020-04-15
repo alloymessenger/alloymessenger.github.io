@@ -172,7 +172,11 @@ function loadChannelRooms(channelID) {
     if (window.channelID == undefined) {
         window.channelID = channelID;
     }
-    requests.getRoomsInChannel(channelID, (rooms) => {
+    sockets.getRoomsInChannel(channelID, (result) => {
+        if (!result.success) {
+            return;
+        }
+        rooms = result.data;
         var sidebarExtension2 = document.getElementsByClassName("sidebar-extension second")[0];
         clearElements(sidebarExtension2);
         rooms.forEach((room) => {
@@ -196,7 +200,8 @@ function loadChannelRooms(channelID) {
             });
             var innerText = document.createElement("div");
             innerText.innerHTML = `<span class="top">${room.name}</span>
-                                    <span class="bottom">${room.last_message == null ? "Send a message..." : `${getFirstName(room.last_message_name)}: ${room.last_message}`}</span>`;
+                                    <span class="bottom">${room.user_relevant ? 
+                                        (room.last_message == null ? "Send a message..." : `${getFirstName(room.last_message_name)}: ${room.last_message}`) : (room.description == null ? "Send a message..." : room.description)}</span>`;
             roomButton.appendChild(innerText);
             sidebarExtension2.appendChild(roomButton);
         });

@@ -38,19 +38,6 @@ requests = function () {
         req.send();
     }
     
-    function getRoomsInChannel(channelID, callback) {
-        let req = new XMLHttpRequest();
-        let roomsURL = `${serverURL}/api/channel/${channelID}/rooms/`;
-        req.open("GET", roomsURL, true);
-        req.onreadystatechange = (e) => {
-            if (req.readyState == 4 && req.status == 200) {
-                var rooms = JSON.parse(req.responseText);
-                callback(rooms);
-            }
-        }
-        req.send();
-    }
-    
     function getMessagesInRoom(channelID, roomID, callback) {
         let req = new XMLHttpRequest();
         let messagesURL = `${serverURL}/api/channel/${channelID}/room/${roomID}/`;
@@ -68,7 +55,6 @@ requests = function () {
         getCourses: getCourses,
         getTopics: getTopics,
         getChannelInfo: getChannelInfo,
-        getRoomsInChannel: getRoomsInChannel,
         getMessagesInRoom: getMessagesInRoom
     }
 }()
