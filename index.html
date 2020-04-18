@@ -101,7 +101,12 @@
     <div id="main">
         <div id="messaging">
             <div id="group-header"><span id="class-name"></span><span id="group-name"></span></div>
-            <div id="description"><textarea readonly id="room-description"></textarea></div>
+            <div id="description">
+                <textarea readonly id="room-description"></textarea>
+                <div id="close-container">
+                    <img src="./icons/triangle.png" id="close">
+                </div>
+            </div>
             <div id="message-holder"></div>
             <div id="message-area">
                 <form name="message-sender" onsubmit="return sendMessage()">
@@ -130,6 +135,15 @@
     </div>
 
     <script>
+        document.getElementById("close-container").addEventListener("click", () => {
+            if (document.getElementById("description").className == "closed") {
+                document.getElementById("description").className = "open";
+                document.getElementById("message-holder").className = "description-open";
+            } else {
+                document.getElementById("description").className = "closed";
+                document.getElementById("message-holder").className = "description-closed";
+            }
+        });
         document.getElementById("browse-button").addEventListener("click", () => {
             document.getElementById("browse-button").className = "selected";
             document.getElementById("groups-button").classList.remove("selected");

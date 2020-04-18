@@ -455,6 +455,14 @@ button:hover {
     transition-delay: 0.1s;
 }
 
+#main #description.open {
+    height: 100px;
+}
+
+#main #description.closed {
+    height: 20px;
+}
+
 #main #description textarea {
     background-color: rgba(0, 0, 0, 0);
     display: block;
@@ -476,11 +484,11 @@ button:hover {
 }
 
 #main #description textarea::-webkit-scrollbar {
-    width: 3px;
+    width: 0px;
     visibility: hidden;
 }
 #main #description textarea::-webkit-scrollbar-thumb {
-    border-radius: 3px;
+    border-radius: 0px;
     background-color: rgba(0, 0, 0, 0.4);
     visibility: hidden;
 }
@@ -496,11 +504,11 @@ button:hover {
 }
 
 #main #description::-webkit-scrollbar {
-    width: 3px;
+    width: 0px;
     visibility: hidden;
 }
 #main #description::-webkit-scrollbar-thumb {
-    border-radius: 3px;
+    border-radius: 0px;
     background-color: rgba(0, 0, 0, 0.4);
     visibility: hidden;
 }
@@ -515,6 +523,35 @@ button:hover {
     transition: 0.5s;
 }
 
+#main #description #close-container {
+    position: absolute;
+    bottom: 0;
+    height: 20px;
+    width: 100%;
+    background-color: rgb(35, 35, 35);
+}
+
+#main #description #close-container:hover {
+    cursor: pointer;
+    background-color: rgb(20, 20, 20);
+    transition: 0.3s;
+}
+
+#main #description.closed #close{
+    transform: rotate(180deg)  translate(-50%, 50%);
+    transition: 0.3s;
+}
+
+#main #description #close {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: left;
+    transform: translate(-50%, -50%);
+    margin-left: 0px;
+    height: 8px;
+    width: 12px;
+}
 
 #main #message-holder {
     position: absolute;
@@ -527,6 +564,14 @@ button:hover {
     padding-bottom: 5px;
     transition: 0.3s;
     transition-delay: 0.1s;
+}
+
+#main #message-holder.description-closed {
+    top: 70px;
+}
+
+#main #message-holder.description-open {
+    top: 150px;
 }
 
 #message-holder::-webkit-scrollbar {

@@ -185,7 +185,11 @@ function loadChannelRooms(channelID) {
             roomButton.addEventListener("click", () => {
                 setChatName(displayedChannel.is_class, `${displayedChannel.subject} ${displayedChannel.number}`, displayedChannel.name, room.name);
                 if (room.description) {
-                    setDescription(room.description);
+                    if (!room.user_relevant) {
+                        setDescription(room.description, "open");
+                    } else {
+                        setDescription(room.description, "closed");
+                    }
                 } else {
                     clearDescription();
                 }
@@ -241,7 +245,11 @@ function getRecentRooms(user) {
             requests.getChannelInfo(room.channel_id, (channel) => {
                 setChatName(channel.is_class, `${channel.subject} ${channel.number}`, channel.name, room.name);
                 if (room.description) {
-                    setDescription(room.description);
+                    if (!room.user_relevant) {
+                        setDescription(room.description, "open");
+                    } else {
+                        setDescription(room.description, "closed");
+                    }
                 } else {
                     clearDescription();
                 }
@@ -452,14 +460,14 @@ function addRoomToSidebar(data) {
     var roomButton = document.createElement("button");
     roomButton.type = "button";
     var innerText = document.createElement("div");
-        innerText.innerHTML = `<span class="top">${data.room_name}</span>
+        innerText.innerHTML = `<span class="top">${data.name}</span>
                                 <span class="bottom">Send a message...</span>`;
     roomButton.appendChild(innerText);
     let currentDisplayedChannel = displayedChannel;
     roomButton.addEventListener("click", () => {
-        setChatName(currentDisplayedChannel.is_class, `${currentDisplayedChannel.subject} ${currentDisplayedChannel.number}`, currentDisplayedChannel.name, data.room_name);
+        setChatName(currentDisplayedChannel.is_class, `${currentDisplayedChannel.subject} ${currentDisplayedChannel.number}`, currentDisplayedChannel.name, data.name);
         if (data.description) {
-            setDescription(data.description);
+            setDescription(data.description, "open");
         } else {
             clearDescription();
         }
@@ -635,16 +643,22 @@ function setChatName(isClass, channelNumber, channelName, roomName) {
     }
 }
 
-function setDescription(description) {
-    document.getElementById("description").style.height = "100px";
-    document.getElementById("room-description").innerHTML = description;
-    document.getElementById("message-holder").style.top = "150px";
+function setDescription(description, state) {
+    if (state == "open") {
+        document.getElementById("description").classList.add("open");
+        document.getElementById("room-description").innerHTML = description;
+        document.getElementById("message-holder").className = "description-open";
+    } else {
+        document.getElementById("description").classList.add("closed");
+        document.getElementById("room-description").innerHTML = description;
+        document.getElementById("message-holder").className = "description-closed";
+    }
 }
 
 function clearDescription() {
-    document.getElementById("description").style.height = "0px";
+    document.getElementById("description").className = "";
     document.getElementById("room-description").innerHTML = "";
-    document.getElementById("message-holder").style.top = "50px";
+    document.getElementById("message-holder").className = "";
 }
 
 function displayBrowse() {
