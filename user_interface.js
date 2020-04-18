@@ -645,14 +645,13 @@ function setChatName(isClass, channelNumber, channelName, roomName) {
 
 function setDescription(description, state) {
     if (state == "open") {
-        document.getElementById("description").classList.add("open");
-        document.getElementById("room-description").innerHTML = description;
+        document.getElementById("description").className = "open";
         document.getElementById("message-holder").className = "description-open";
     } else {
-        document.getElementById("description").classList.add("closed");
-        document.getElementById("room-description").innerHTML = description;
+        document.getElementById("description").className = "closed";
         document.getElementById("message-holder").className = "description-closed";
     }
+    document.getElementById("room-description").innerHTML = description;
 }
 
 function clearDescription() {
@@ -687,6 +686,8 @@ function addBrowseChannelRows(channels, type) {
         let selectedChannels;
         if (type == "course") {
             selectedChannels = user.courses;
+        } else {
+            selectedChannels = user.topics;
         }
         channels.forEach((channel) => {
             let div = document.createElement("div");
