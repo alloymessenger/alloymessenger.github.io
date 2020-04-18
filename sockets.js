@@ -109,6 +109,9 @@ sockets = function() {
     function messageChannel(roomID, channelID, name, photoLink, time, message, callback) {
         socket.emit('message', {roomID, channelID, name, photoLink, time, message}, callback)
     }
+    function reportMessage(messageID, callback) {
+        socket.emit('report_message', {messageID}, callback)
+    }
     function addRoom(channelID, roomName, description, callback) {
         socket.emit('new_room', {channelID, roomName, description}, callback)
     }
@@ -135,6 +138,7 @@ sockets = function() {
         joinRoom: joinRoom,
         leaveRoom: leaveRoom,
         messageChannel: messageChannel,
+        reportMessage: reportMessage,
         addRoom: addRoom,
         addTopic: addTopic,
         getUserInfo: getUserInfo,

@@ -662,6 +662,7 @@ textarea:focus, input:focus {
 
 .message-row {
     position: relative;
+    display: flex;
 }
 
 .profile-photo {
@@ -680,7 +681,7 @@ textarea:focus, input:focus {
     text-align: left;
     position: relative;
     display: table;
-    margin: 4px auto 0px 45px; 
+    margin: 4px 0px 0px 45px; 
     left: 0;
     background: rgb(210, 210, 210);
     border-radius: 20px;
@@ -691,14 +692,14 @@ textarea:focus, input:focus {
     font-family: 'Roboto', sans-serif;
 }
 
-.speech-bubble.top {
+.top .speech-bubble {
     border-bottom-left-radius: 5px;
-    margin: 2px auto 0px 45px;
+    margin: 2px 0px 0px 45px;
 }
 
-.speech-bubble.bottom {
+.bottom .speech-bubble {
     border-top-left-radius: 5px;
-    margin: 2px auto 0px 45px;
+    margin: 2px 0px 0px 45px;
 }
 
 .special-speech-bubble {
@@ -717,18 +718,60 @@ textarea:focus, input:focus {
     font-family: 'Roboto', sans-serif;
 }
 
-.special-speech-bubble.incognito {
+.incognito .special-speech-bubble {
     background: rgb(45, 45, 45);
 }
 
-.special-speech-bubble.top {
+.top .special-speech-bubble {
     border-bottom-right-radius: 5px;
     margin: 2px 5px 0px auto;
 }
 
-.special-speech-bubble.bottom {
+.bottom .special-speech-bubble {
     border-top-right-radius: 5px;
     margin: 2px 5px 0px auto;
+}
+
+.extra-options-container {
+    display: flex;
+    position: relative;
+    margin-top: 4px;
+    margin-right: auto;
+}
+
+.extra-options-container .report { 
+    color: rgb(219, 39, 39);
+    font-family: 'Roboto', sans-serif;
+    font-weight: bolder;
+    font-size: 13px;
+    margin: auto auto auto 15px;
+}
+
+.extra-options-container .report.finished { 
+    color: #1B998B;
+}
+
+.extra-options-container .report:hover { 
+    cursor: pointer;
+}
+
+.top .extra-options-container {
+    margin-top: 2px;
+}
+
+.bottom .extra-options-container {
+    margin-top: 2px;
+}
+
+.extra-options {
+    margin: auto auto auto 15px;
+    position: relative;
+    height: 15px;
+    width: 15px;
+}
+
+.extra-options:hover {
+    cursor: pointer;
 }
 
 #modal {
