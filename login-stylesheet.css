@@ -276,3 +276,55 @@ span.buttonText {
     right: 0;
     width: 50%;
 }
+
+@media only screen and (max-height: 600px) {
+    .subheader {
+        display: none;
+    }
+    #learn-more {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 450px) {
+    .top-left {
+        position: absolute;
+        display: inline-block;
+        margin-left: 70px;
+        left: 0;
+        top: 20%;
+        transform: translateY(-50%);
+        width: 40%;
+    }
+    #logo {
+        margin-right: 12px;
+        height: 60px;
+        width: 60px;
+        vertical-align: middle;
+    }
+    #title {
+        color: rgb(40, 40, 40);
+        display: inline;
+        text-align: center;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 60px;
+        font-weight: normal;
+        text-shadow: 1px 1px rgba(0, 0, 0, 0.3);
+        vertical-align: middle;
+        margin-right: 60px;
+    }
+    .large-header {
+        display: none;
+    }
+    .subheader {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    #site-screenshot {
+        width: 500px;
+        right: default;
+        left: 55%;
+    }
+}
