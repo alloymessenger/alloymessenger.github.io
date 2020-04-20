@@ -81,35 +81,54 @@
     </script>
 </head>
 <body>
-    <div class="center">
+    <div class="top-left">
         <img src="./icons/logo-shadow.svg" id="logo"><h1 id="title">alloy</h1>
-        <div id="customBtn" class="customGPlusSignIn">
-            <span class="icon"></span>
-            <span class="buttonText">Sign in with Google</span>
-        </div>
         <script>startApp();</script>
     </div>
-
-
-
-    <div id="info-box">
-        <div id="info-box-content">
-            <div class="header">What is Alloy?</div>
-            <div class="info-text">Alloy is a messaging platform with chat rooms for all of your classes and interest groups. 
-            The purpose of Alloy is to make it easier to meet and work with people you wouldn’t otherwise know—in other words, 
-            to create new social and educational communities, all digitally.</div>
-            <div class="header">What can you do with Alloy?</div>
-            <div class="info-text">In every class, you can create rooms about whatever you want: working through lab reports, 
-                    studying for a prelim, getting help with problem sets, and more. 
-                    You can even talk about things you wouldn’t want to talk about on something like Piazza: 
-                    which professors are good to take the class with, what you missed in class, or how you thought a prelim or final went.</div>
-                    
-            <div class="info-text">You can also find and create channels for any interests you have: find other people going to local concerts, 
-                    share and read interesting articles from other people, and get career advice. Alloy isn’t like Slack or GroupMe where you need to be invited to a group to participate; 
-                    you can explore them by yourself, create them and watch as other people join and form natural communities.</div>
+    <div class="top-right" id="learn-more">Learn more</div>
+    
+    <div id="on-screen">
+        <div id="site-description">
+            <div class="large-header">Find, create, and converse with communities you care about.</div>
+            <div class="subheader">Work through problem sets, prepare for interviews, find concerts, sell sports tickets, and create a community for anything you care about on campus. </div>
+            <div id="customBtn" class="customGPlusSignIn">
+                <span class="icon"></span>
+                <span class="buttonText">Sign in with Google</span>
+            </div>
         </div>
+        <img src="./screenshot.png" id="site-screenshot">
     </div>
 
-    <img src="./screenshot.png" id="site-screenshot">
+    <div id="scroll-down-portion">
+        <div id="info-box">
+            <div id="info-box-content">
+                <div class="header">What is Alloy?</div>
+                <div class="info-text">Alloy is a messaging platform with chat rooms for all of your classes and interest groups. 
+                The purpose of Alloy is to make it easier to meet and work with people you wouldn’t otherwise know—in other words, 
+                to create new social and educational communities, all digitally.</div>
+                <div class="header">What can you do with Alloy?</div>
+                <div class="info-text">In every class, you can create rooms about whatever you want: working through lab reports, 
+                        studying for a prelim, getting help with problem sets, and more. 
+                        You can even talk about things you wouldn’t want to talk about on something like Piazza: 
+                        which professors are good to take the class with, what you missed in class, or how you thought a prelim or final went.</div>
+                        
+                <div class="info-text">You can also find and create channels for any interests you have: find other people going to local concerts, 
+                        share and read interesting articles from other people, and get career advice. Alloy isn’t like Slack or GroupMe where you need to be invited to a group to participate; 
+                        you can explore them by yourself, create them and watch as other people join and form natural communities.</div>
+                <div class="header">How do I use Alloy?</div>
+                <div class="info-text">Using Alloy is as simple as logging in with your Cornell email and joining a class or channel. You don’t need to fill out any information about yourself; we don’t keep track of it.</div>
+                        
+                <div class="header">How do you deal with moderation issues (e.g. spam or academic integrity violations)?</div>
+                <div class="info-text">Because Alloy is limited to Cornell, users can only contribute with one account connected to their netID. 
+                    Alloy is not moderated by Cornell, but all messages (even ones sent in anonymous mode) are linked to a netID and can be reported by users for violations of site rules. 
+                    We don’t condone any form of cheating; anonymity is encouraged only to make you feel more comfortable sharing and talking to others, not spamming or giving people an unfair advantage.</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("learn-more").addEventListener("click", () => {
+            window.scrollTo(0, 500000);
+        })
+    </script>
 </body>
 </html>

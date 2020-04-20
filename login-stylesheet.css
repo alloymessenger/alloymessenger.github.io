@@ -1,15 +1,36 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet');
 
-body, html {
+html {
     height: 100%;
     font-size: 100%;
     text-align: center;
-    overflow: hidden;
-}
-
-html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0 0;
     background-color: rgb(245, 245, 245);
     background-attachment: fixed;
+}
+
+:hover::-webkit-scrollbar {
+    visibility: visible;
+    transition: 0.5s;
+}
+
+:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+    transition: 0.5s;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    visibility: hidden;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background-color: rgba(0, 0, 0, 0.4);
+    visibility: hidden;
 }
 
 button:hover {
@@ -18,11 +39,9 @@ button:hover {
 
 #logo {
     display: inline-block;
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-top: 10px;
-    height: 110px;
-    width: 110px;
+    margin-right: 12px;
+    height: 40px;
+    width: 40px;
     vertical-align: middle;
 }
 
@@ -31,20 +50,67 @@ button:hover {
     display: inline;
     text-align: center;
     font-family: 'Quicksand', sans-serif;
-    font-size: 110px;
+    font-size: 40px;
     font-weight: normal;
-    text-shadow: 3px 3px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.3);
     vertical-align: middle;
     margin-right: 60px;
+}
+
+/* #top-half {
+    position: absolute;
+    height: 40%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+#bottom-half {
+    position: absolute;
+    bottom: 0;
+    height: 60%;
+    width: 100%;
+    left: 0;
+} */
+
+#on-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#scroll-down-portion {
+    position: absolute;
+    top: 100vh;
+    width: 100%;
+    left: 0;
+}
+
+.top-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 25px;
+    margin-top: 25px;
+}
+
+.top-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: 35px;
+    margin-top: 35px;
 }
 
 .center {
     margin: 0;
     width: 100%;
     position: absolute;
-    top: 5%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, -5%);
+    transform: translate(-50%, -50%);
 }
 
 .bottom-right {
@@ -63,8 +129,21 @@ button:hover {
     /* border: solid rgb(100, 100, 100); Thinner appearance */
     box-shadow: 2px 2px 2px rgb(200, 200, 200);
     white-space: nowrap;
+    margin-top: 20px;
 }
 #customBtn:hover {
+    cursor: pointer;
+}
+
+#learn-more {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: rgb(68, 147, 250);
+    z-index: 2;
+}
+
+#learn-more:hover {
     cursor: pointer;
 }
 
@@ -97,12 +176,6 @@ span.buttonText {
     font-size: 20px;
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
-}
-
-.top-right {
-    position: relative;
-    top: 30px;
-    right: 30px;
 }
 
 .close {
@@ -140,42 +213,66 @@ span.buttonText {
     margin: 20px 20px 20px 20px;
 }
 
-.header {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
+.large-header {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 35px;
     font-weight: bold;
+}
+
+.header {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.subheader {
+    margin-top: 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 23px;
+    font-weight: lighter;
 }
 
 #info-box {
     position: absolute;
-    margin: 40px 40px 40px 40px;
-    padding: 10px 10px;
-    border-style: solid;
-    border-radius: 2px;
+    margin: 0;
+    padding: 0 10%;
     left: 0;
-    width: 40%;
-    bottom: 0;
+    top: 0;
+    width: 80%;
     overflow: auto;
 }
 
 .info-text {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: normal;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    font-weight: lighter;
     margin-bottom: 20px;
+    margin-top: 5px;
 }
 
 #info-box-content {
     display: relative;
     text-align: left;
+    margin-bottom: 80px;
+}
+
+#site-description {
+    position: absolute;
+    display: inline-block;
+    margin: 0px 40px;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40%;
 }
 
 #site-screenshot {
     position: absolute;
     display: inline-block;
-    margin-right: 40px;
-    margin-bottom: 40px;
-    bottom: 0;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     right: 0;
     width: 50%;
 }
