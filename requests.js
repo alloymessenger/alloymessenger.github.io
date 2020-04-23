@@ -12,6 +12,32 @@ requests = function () {
         req.send();
     }
 
+    function getFilteredCourses(query, callback) {
+        let req = new XMLHttpRequest();
+        let filteredCoursesURL = `${serverURL}/api/courses/filtered/${query}/`;
+        req.open("GET", filteredCoursesURL, true);
+        req.onreadystatechange = (e) => {
+            if (req.readyState == 4 && req.status == 200) {
+                courses = JSON.parse(req.responseText);
+                callback(courses);
+            }
+        }
+        req.send();
+    }
+
+    function getFilteredTopics(query, callback) {
+        let req = new XMLHttpRequest();
+        let filteredTopicsURL = `${serverURL}/api/topics/filtered/${query}/`;
+        req.open("GET", filteredTopicsURL, true);
+        req.onreadystatechange = (e) => {
+            if (req.readyState == 4 && req.status == 200) {
+                topics = JSON.parse(req.responseText);
+                callback(topics);
+            }
+        }
+        req.send();
+    }
+
     function getTopics(callback) {
         let req = new XMLHttpRequest();
         let topicsURL = `${serverURL}/api/topics/`;
@@ -53,7 +79,9 @@ requests = function () {
 
     return {
         getCourses: getCourses,
+        getFilteredCourses: getFilteredCourses,
         getTopics: getTopics,
+        getFilteredTopics: getFilteredTopics,
         getChannelInfo: getChannelInfo,
         getMessagesInRoom: getMessagesInRoom
     }

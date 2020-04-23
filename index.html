@@ -5,8 +5,7 @@
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="https://alloymessenger.github.io/"/>
     <meta property="og:title" content="Alloy Messenger"/>
-    <meta property="og:description" content="Find, create, and converse with communities you care about.
-    Work through problem sets, prepare for interviews, find concerts, sell sports tickets, and create a community for anything you care about on campus."/>
+    <meta property="og:description" content="Find, create, and converse with communities you care about on campus."/>
     <link rel="stylesheet" href="chat-stylesheet.css">
     <meta name="google-signin-client_id" content="346925839515-g5rho0muuob69h91ivpeh6nrvho870ii.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/api:client.js"></script>
@@ -184,8 +183,10 @@
         });
         document.getElementById("logout-button").addEventListener("click", signOut);
         document.getElementsByClassName("modal-field")[0].addEventListener("keyup", () => {
-            if (document.getElementById("confirm-modal").className == "search" || document.getElementById("modal-title").innerHTML == "Find/create a community:") {
-                filter();
+            if (document.getElementById("confirm-modal").className == "search") {
+                filter("course");
+            } else if (document.getElementById("modal-title").innerHTML == "Find/create a community:") {
+                filter("topic");
             }
         })
         document.getElementsByClassName("modal-field")[0].addEventListener("keyup", (event) => {

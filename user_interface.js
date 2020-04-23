@@ -412,14 +412,14 @@ function toggleIncognito(button) {
 function displayModal(styleName) {
     document.getElementsByClassName("modal-field")[0].value = "";
     if (styleName == "course") {
-        fetchCourses();
+        document.getElementById("search-results").innerHTML = "";
         document.getElementById("modal-title").innerHTML = "Search for a class:";
         document.getElementById("search-results").style.display = "block";
         document.getElementById("description-container").style.display = "none";
         document.getElementById("confirm-modal").className = "search";
     }
     if (styleName == "topic") {
-        fetchTopics();
+        document.getElementById("search-results").innerHTML = "";
         document.getElementById("modal-title").innerHTML = "Find/create a community:";
         document.getElementById("search-results").style.display = "block";
         document.getElementById("description-container").style.display = "none";
@@ -438,25 +438,6 @@ function displayModal(styleName) {
 
 function hideModal() {
     document.getElementById("modal").style.display = "none";
-}
-
-function fetchCourses() {
-    if (courses.length == 0) {
-        requests.getCourses((courses) => {
-            addModalCourseRows(courses);
-            addBrowseCourseRows(courses);
-        })
-    } else {
-        addModalCourseRows(window.courses);
-        addBrowseCourseRows(window.courses);
-    }
-}
-
-function fetchTopics() {
-    requests.getTopics((topics) => {
-        addModalTopicRows(topics);
-        addBrowseTopicRows(topics);
-    })
 }
 
 function submitModal() {
@@ -581,16 +562,20 @@ function addModalChannelRows(channels, type) {
     });
 }
 
-function filter() {
+function filter(type) {
     var input = document.getElementsByClassName("modal-field")[0].value;
     var filter = input.toUpperCase();
-    var rows = document.getElementsByClassName("modal-row");
-    for (i = 0; i < rows.length; i++) {
-        var currRowText = rows[i].firstElementChild.firstElementChild.innerHTML.toUpperCase();
-        if (currRowText.indexOf(filter) > -1) {
-            rows[i].style.display = "";
-        } else {
-            rows[i].style.display = "none";
+    if (type == "course") {
+        if (filter != "") {
+            requests.getFilteredCourses(filter, (courses) => {
+                addModalCourseRows(courses);
+            })
+        }
+    } else {
+        if (filter != "") {
+            requests.getFilteredTopics(filter, (topics) => {
+                addModalTopicRows(topics);
+            })
         }
     }
 }
@@ -697,13 +682,11 @@ function clearDescription() {
 function displayBrowse() {
     document.getElementById("messaging").classList.add("hidden");
     document.getElementById("browse").classList.remove("hidden");
-    fetchCourses();
 }
 
 function displayMessaging() {
     document.getElementById("messaging").classList.remove("hidden");
     document.getElementById("browse").classList.add("hidden");
-    fetchCourses();
 }
 
 function addBrowseTopicRows(topics) {
@@ -775,19 +758,11 @@ function filterBrowse() {
     var input = document.getElementById("search").value;
     var filter = input.toUpperCase();
     var rows = document.getElementsByClassName("browse-row");
-    for (i = 0; i < rows.length; i++) {
-        var currRow = rows[i].getElementsByClassName("table-row")[0];
-        var subject = currRow.getElementsByClassName("col-1")[0].textContent.toUpperCase();
-        var number = currRow.getElementsByClassName("col-2")[0].textContent;
-        var name = currRow.getElementsByClassName("col-3")[0].textContent.toUpperCase();
-        var shortTitle = subject + " " + number;
-        var longTitle = subject + " " + number + " - " + name;
-
-        if (shortTitle.indexOf(filter) > -1 || longTitle.indexOf(filter) > -1) {
-            rows[i].style.display = "";
-        } else {
-            rows[i].style.display = "none";
-        }
+    document.getElementById("table-rows").innerHTML = "";
+    if (filter != "") {
+        requests.getFilteredCourses(filter, (courses) => {
+            addBrowseCourseRows(courses);
+        })
     }
 }
 
