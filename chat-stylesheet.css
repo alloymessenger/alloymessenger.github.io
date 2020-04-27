@@ -991,20 +991,19 @@ textarea:focus, input:focus {
 }
 
 #browse .search-box {
-    background: rgb(190, 190, 190);
-    width: 80%;
+    background: rgb(253, 253, 253);
+    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 90%;
     border-radius: 25px;
     height: 25px;
-    padding: 10px;
+    padding: 10px 0px 10px 0px;
     display: inline-block;
-    margin-left: 40px;
-    margin-right: 40px;
-    margin-top: 40px;
-    margin-bottom: 25px;
+    margin: 40px auto 0px auto;
 }
 
 #browse .search-box:hover {
-    background: rgba(200, 200, 200);
+    background: rgb(255, 255, 255);
     transition: 0.3s;
 }
 
@@ -1017,86 +1016,102 @@ textarea:focus, input:focus {
     background: none;
     outline: none;
     float: left;
-    padding: 0;
     color: rgb(25, 25, 25);
     font-size: 15px;
     line-height: 25px;
     font-family: 'Roboto', sans-serif;
     width: 100%;
-    padding-left: 10px;
+    padding-left: 20px;
     padding-right: 10px;
 }
 
 #browse li {
-    padding: 3% 30px;
     display: flex;
     justify-content: space-between;
 }
 
-.table-header {
-    background-color: rgba(0, 142, 187, 0.5);
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    font-size: 21px;
-    color: white;
-    font-family: 'Roboto', sans-serif;
-    letter-spacing: 0.03em;
+#browse-search-results {
+    text-align: left;
+    height: 300px;
+    width: 90%;
+    margin: 20px auto 0px auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
-.table-row {
-    background-color: rgba(255, 255, 255, 0);
-    border-bottom: 1px solid rgba(150, 150, 150, 0.5);
-    color: black;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.table-row:hover {
-    background-color:  rgb(200, 200, 200, 0.3);
-    transition: 0.3s;
-}
-
-#table-rows {
-    height:400px; 
-    overflow:auto;
-}
-
-#table-rows:hover::-webkit-scrollbar {
+#browse-search-results:hover::-webkit-scrollbar {
     visibility: visible;
     transition: 0.5s;
 }
 
-#table-rows:hover::-webkit-scrollbar-thumb {
+#browse-search-results:hover::-webkit-scrollbar-thumb {
     visibility: visible;
     transition: 0.5s;
 }
 
-#table-rows::-webkit-scrollbar {
+#browse-search-results::-webkit-scrollbar {
     width: 3px;
+    margin: -3px;
     visibility: hidden;
 }
 
-#table-rows::-webkit-scrollbar-thumb {
+#browse-search-results::-webkit-scrollbar-thumb {
     border-radius: 2px;
     background-color: rgba(0, 0, 0, 0.4);
     visibility: hidden;
 }
 
-.col-1 {
-    flex-basis: 15%;
+#browse-search-results::-webkit-scrollbar-track {
+    background-color: rgba(11, 153, 200, 0.2);
+    margin-bottom: 13px;
+
 }
 
-.col-2 {
-    flex-basis: 15%;
+#browse-search-padding {
+    display: none;
+    height: 20px;
+    width: 90%;
+    z-index: -1;
+    margin: -20px auto;
+    background-color: rgba(11, 153, 200, 0.2);
+    bottom: 0;
 }
 
-.col-3 {
-    flex-basis: 65%;
+.browse-search-result {
+    position: relative;
+    display: block;
+    background-color: rgba(11, 153, 200, 0.2);
+    width: 100%;
+    height: 50px;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(45, 45, 45);
+    /* border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px; */
+    margin: 0px auto;
+    padding: 10px 0px;
+    z-index: 2;
 }
 
-.col-4 {
-    flex-basis: 5%;
+.browse-search-result.bottom {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.browse-search-result .center {
+    height: 100%;
+    padding: 10px 10px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-30%);
+}
+
+.content {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 20px;
 }
 
 #browse button.select {
@@ -1109,15 +1124,19 @@ textarea:focus, input:focus {
     border: none;
     padding: 10px 10px;
     vertical-align: middle;
-    display: inline-block;
     margin: auto;
     box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
+    float: right;
+    margin-right: 20px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #browse button.select:hover {
     cursor: pointer;
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
+    -webkit-transform: scale(1.05);
+    transform: scale(1.1) translateY(-50%);
     transition: 0.3s;
 }
 

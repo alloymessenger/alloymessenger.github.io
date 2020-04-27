@@ -572,11 +572,9 @@ function filter(type) {
             })
         }
     } else {
-        if (filter != "") {
-            requests.getFilteredTopics(filter, (topics) => {
-                addModalTopicRows(topics);
-            })
-        }
+        requests.getFilteredTopics(filter, (topics) => {
+            addModalTopicRows(topics);
+        })
     }
 }
 
@@ -682,6 +680,7 @@ function clearDescription() {
 function displayBrowse() {
     document.getElementById("messaging").classList.add("hidden");
     document.getElementById("browse").classList.remove("hidden");
+    filterBrowse();
 }
 
 function displayMessaging() {
@@ -698,13 +697,23 @@ function addBrowseCourseRows(courses) {
 }
 
 function addBrowseChannelRows(channels, type) {
-    var tableRows = document.getElementById("table-rows");
+    let tableRows = document.getElementById("table-rows");
     sockets.getUserInfo((user) => {
         let selectedChannels;
         if (type == "course") {
             selectedChannels = user.courses;
-        } else {
+        } else if (type == "topics") {
             selectedChannels = user.topics;
+        }
+        else {
+            selectedChannels = user.courses.concat(user.topics);
+        }
+        tableRows = document.getElementById("browse-search-results");
+        tableRows.innerHTML = "";
+        if (channels.length > 0) {
+            document.getElementById("browse-search-padding").style.display = "block";
+        } else {
+            document.getElementById("browse-search-padding").style.display = "none";
         }
         channels.forEach((channel) => {
             let div = document.createElement("div");
@@ -724,20 +733,35 @@ function addBrowseChannelRows(channels, type) {
             let tableRow = document.createElement("li");
             tableRow.className = "table-row";
             tableRow.id = channel.channel_id;
-            if (type == "course") {
-                tableRow.innerHTML = `<div class="col-1">${channel.subject}</div>
-                                        <div class="col-2">${channel.number}</div>
-                                        <div class="col-3">${channel.name}</div>`;
+            let channelID = channel.channel_id;
+            if (channel.is_class) {
+                let searchResult = document.createElement("div");
+                searchResult.className = "browse-search-result";
+                searchResult.id = channelID;
+                let span = document.createElement("span");
+                span.className = "content";
+                span.innerHTML = `<b>${channel.subject} ${channel.number}</b>: ${channel.name}`;
+                searchResult.appendChild(button);
+                searchResult.appendChild(span);
+                tableRow.appendChild(searchResult);
+            } else {
+                let searchResult = document.createElement("div");
+                searchResult.className = "browse-search-result";
+                searchResult.id = channelID;
+                let span = document.createElement("span");
+                span.className = "content";
+                span.innerHTML = `${channel.name}`;
+                searchResult.appendChild(button);
+                searchResult.appendChild(span);
+                tableRow.appendChild(searchResult);
             }
-            else {
-                tableRow.innerHTML = `<div class="col-1"></div>
-                                        <div class="col-2"></div>
-                                        <div class="col-3">${channel.name}</div>`;
-            }
-            tableRow.appendChild(button);
             row.appendChild(tableRow);
             tableRows.appendChild(row);
         });
+        let searchResults = document.getElementsByClassName("browse-search-result");
+        if (searchResults.length > 0) {
+            searchResults[searchResults.length - 1].classList.add("bottom");
+        }
     })
 
     function browseButtonClick(button, channel) {
@@ -757,12 +781,16 @@ function addBrowseChannelRows(channels, type) {
 function filterBrowse() {
     var input = document.getElementById("search").value;
     var filter = input.toUpperCase();
-    var rows = document.getElementsByClassName("browse-row");
-    document.getElementById("table-rows").innerHTML = "";
+    var rows = document.getElementsByClassName("browse-search-results");
+    rows.innerHTML = "";
     if (filter != "") {
-        requests.getFilteredCourses(filter, (courses) => {
-            addBrowseCourseRows(courses);
-        })
+        requests.getFilteredChannels(filter, (channels) => {
+            addBrowseChannelRows(channels);
+        });
+    } else {
+        requests.getTopics((topics) => {
+            addBrowseTopicRows(topics);
+        });
     }
 }
 

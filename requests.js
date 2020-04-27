@@ -12,6 +12,19 @@ requests = function () {
         req.send();
     }
 
+    function getTopics(callback) {
+        let req = new XMLHttpRequest();
+        let topicsURL = `${serverURL}/api/topics/`;
+        req.open("GET", topicsURL, true);
+        req.onreadystatechange = (e) => {
+            if (req.readyState == 4 && req.status == 200) {
+                topics = JSON.parse(req.responseText);
+                callback(topics);
+            }
+        }
+        req.send();
+    }
+
     function getFilteredCourses(query, callback) {
         let req = new XMLHttpRequest();
         let filteredCoursesURL = `${serverURL}/api/courses/filtered/${query}/`;
@@ -38,14 +51,14 @@ requests = function () {
         req.send();
     }
 
-    function getTopics(callback) {
+    function getFilteredChannels(query, callback) {
         let req = new XMLHttpRequest();
-        let topicsURL = `${serverURL}/api/topics/`;
-        req.open("GET", topicsURL, true);
+        let filteredChannelsURL = `${serverURL}/api/channel/filtered/${query}/`;
+        req.open("GET", filteredChannelsURL, true);
         req.onreadystatechange = (e) => {
             if (req.readyState == 4 && req.status == 200) {
-                topics = JSON.parse(req.responseText);
-                callback(topics);
+                channels = JSON.parse(req.responseText);
+                callback(channels);
             }
         }
         req.send();
@@ -82,6 +95,7 @@ requests = function () {
         getFilteredCourses: getFilteredCourses,
         getTopics: getTopics,
         getFilteredTopics: getFilteredTopics,
+        getFilteredChannels: getFilteredChannels,
         getChannelInfo: getChannelInfo,
         getMessagesInRoom: getMessagesInRoom
     }
